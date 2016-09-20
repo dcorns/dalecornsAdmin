@@ -1,0 +1,52 @@
+#current h3{
+    max-width: 80%;
+    text-align: center;
+}
+#current table{
+    width: 80%;
+}
+#current th{
+    text-align: left;
+}
+#current td{
+    text-align: left;
+    width: 5vw;
+    height: 5vw;
+}
+#current tr, td:nth-child(1){
+    background-color: #ddffdd;
+}
+#current td:nth-child(2){
+    background-color: #ddffa3;
+    width: 5%;
+}
+#current td:nth-child(2):hover{
+    border-radius: 80%;
+}
+#current td:nth-child(3){
+    background-color: #ddffdd;
+}
+#current .icon{
+    fill: green;
+}
+#current .icon:hover{
+    fill: deepskyblue;
+}
+#current.icon:active{
+    fill: darkblue;
+}
+#activity-detail{
+    position: absolute;
+    color: deepskyblue;
+    background-color: darkgreen;
+    border: inset 2px whitesmoke;
+}
+#current button{
+    background-color: #8ECBE3;
+    border-radius: 50%;
+    text-align: center;
+}
+#current #frmActivity #frmdetail{
+    display: inline-block;
+    width:100%;
+}

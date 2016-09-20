@@ -1,0 +1,122 @@
+/*Style Layout*/
+
+@media screen{
+    html{
+        font-size: 4vw;
+        font-family: sans-serif;
+    }
+    header {
+        position: fixed;
+        width: 100%;
+        top: 0;
+    }
+    main{
+        margin-top: 24%;
+        padding: 0;
+    }
+    h2, h3, h4{
+        margin: 0;
+        padding: 0;
+    }
+    h2{
+        font-size: 1.4rem;
+    }
+    h3{
+        font-size: 1.2rem;
+    }
+    address{
+        box-shadow: 2px 2px 2px 1px;
+        padding: 1% 1%;
+    }
+    address a, span{
+        display: inline-block;
+        width: 5vw;
+        height: 5vw;
+        vertical-align: middle;
+    }
+    input:required{
+        border-width: 3px;
+    }
+    .hide {
+        display: none;
+    }
+    .show{
+        display: inline-block;
+        width: 8%;
+        vertical-align: top;
+    }
+    .show img {
+        border-radius: 7pt;
+        box-shadow: 2px 2px 2px 1px;
+        max-width: 100%;
+    }
+    .basic-info{
+        margin-top: 1%;
+        margin-left: 2%;
+        width: 82%;
+        height: 60%;
+        display: inline-block;
+        text-align: left;
+    }
+    .basic-info h2{
+        display: inline-block;
+    }
+    .basic-info aside{
+        font-size: .5rem;
+    }
+    .hide{
+        display: none;
+    }
+    .icon {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .email{
+        display: inline-block;
+        font-size: .8rem;
+    }
+    .page-nav{
+        display: none;
+    }
+}
+
+@media screen and (min-width: 800px){
+    html{
+        font-size: 2vw;
+    }
+    address{
+        padding: 0;
+    }
+    address a{
+        width: 2vw;
+        height: 2vw;
+    }
+    #current td{
+        width: 2vw;
+        height: 2vw;
+    }
+    main{
+        margin-top: 13%;
+        margin-left: 13%;
+    }
+    .page-nav {
+        position: fixed;
+        /*top: 24%;*/
+        display: block;
+        width: 12%;
+        /*padding-top: 10px;*/
+        /*height: 100%;*/
+        border-radius: 6pt;
+        border-right: 2px;
+        border-left: 2px;
+    }
+    .page-nav svg{
+        height: 3vw;
+    }
+    .mobile-menu{
+        display: none;
+    }
+    .btn-nav{
+        display:none;
+    }
+}

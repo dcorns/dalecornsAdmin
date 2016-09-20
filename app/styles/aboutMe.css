@@ -1,0 +1,48 @@
+@media screen and (min-width: 768px) {
+    #aboutme {
+        margin-right: 1.75%;
+        padding: 0;
+    }
+
+    #aboutme p {
+        line-height: 150%;
+        color: black;
+        font-family: serif;
+    }
+
+    #aboutme h3 {
+        font-size: 1rem;
+        margin-top: 1%;
+        text-align: center;
+    }
+
+    #aboutme p {
+        font-size: .8rem;
+    }
+
+    #aboutme h4 {
+        font-size: .75rem;
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 1%;
+    }
+
+    #aboutme article {
+        text-align: justify;
+    }
+
+    #aboutme .large-article p:nth-child(2) {
+        column-count: 2;
+        column-gap: 20px;
+        column-rule-style: solid;
+        column-rule-color: #aaaaaa;
+    }
+
+    #aboutme .small-article {
+        width: 29%;
+        float: right;
+        margin-right: 2%;
+        margin-left: 2%;
+
+    }
+}

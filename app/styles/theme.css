@@ -1,0 +1,75 @@
+/*Style Theme*/
+:root {
+    --body_bg_color: #8ECBE3;
+    --main_border_color: #134AD9;
+    --font_color: #3D4966;
+    --emph_color: #FFF6BF;
+    --shade_color: #FF3127;
+    --show_bg: #000000;
+    --valid_bg: #ddffdd;
+    --invalid_bg: #ffdddd;
+
+}
+
+body{
+    background-color: var(--body_bg_color);
+    color: var(--font_color);
+}
+header{
+    background: linear-gradient(var(--main_border_color),var(--body_bg_color));
+    border-bottom: solid var(--emph_color);
+}
+nav{
+    background: linear-gradient(var(--main_border_color),var(--body_bg_color));
+}
+table tr{
+    border-bottom: black;
+    border-style: solid;
+}
+h1{
+    font-style: oblique;
+    font-weight: 400;
+}
+button {
+    background-color: transparent;
+}
+a {
+    text-decoration: none;
+}
+
+address{
+    box-shadow: darkslategrey;
+    background-color: #3D4966;
+    border-style: groove;
+    border-color: darkblue;
+}
+input:invalid {
+    background-color: var(--invalid_bg);
+}
+
+input:valid {
+    background-color: var( --valid_bg);
+}
+
+input:required {
+    border-color: #800000;
+}
+.show{
+    box-shadow: darkslategrey;
+}
+.page-nav{
+    border-right: solid var(--emph_color);
+    border-left: solid var(--emph_color);
+}
+.email{
+    color: #b4b472;
+}
+.basic-info aside{
+    color: #c45a1a;;
+}
+.icon:hover{
+    fill: deepskyblue;
+}
+.icon:active{
+    fill: darkblue;
+}

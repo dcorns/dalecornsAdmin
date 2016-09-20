@@ -1,0 +1,43 @@
+<svg style="display:none">
+    <symbol id="icon-link" viewBox="0 0 512 512">
+        <path d="M131.525,357.807l226.281-226.281l22.625,22.625L154.15,380.432L131.525,357.807z M218.588,361.244
+	c2.719,10.594,0.453,22.219-7.844,30.5l-45.266,45.281c-12.5,12.5-32.734,12.5-45.25,0l-45.25-45.281
+	c-12.516-12.5-12.516-32.719,0-45.25l45.25-45.25c8.281-8.281,19.859-10.531,30.453-7.875l47.578-47.563
+	c-37.469-26.594-89.734-23.359-123.281,10.188l-45.266,45.25c-37.422,37.438-37.422,98.344,0,135.781l45.266,45.25
+	c37.422,37.438,98.328,37.438,135.766,0l45.25-45.25c33.563-33.563,36.75-85.875,10.141-123.344L218.588,361.244z M482.275,74.979
+	l-45.25-45.266c-37.438-37.422-98.344-37.422-135.781,0l-45.25,45.266c-33.547,33.547-36.781,85.813-10.188,123.281l47.594-47.594
+	c-2.688-10.578-0.438-22.156,7.844-30.438l45.25-45.25c12.5-12.5,32.75-12.516,45.25,0l45.281,45.25
+	c12.5,12.516,12.469,32.766,0,45.25l-45.281,45.266c-8.281,8.297-19.906,10.547-30.5,7.844l-47.563,47.563
+	c37.438,26.625,89.781,23.406,123.344-10.156l45.25-45.25C519.713,173.307,519.713,112.4,482.275,74.979z"></path>
+    </symbol>
+</svg>
+
+<section id="current">
+    <h3>Enter Current/Update Activities</h3>
+    <nav id="menu-activities-category"></nav>
+    <button id="btnAddNew">Add Activity</button>
+        <form id="frmActivity" class="hide">
+            <input id="frmStartDate" placeholder="startDateTime" type="datetime-local">
+            <input id="frmActivityLine" placeholder="activity" type="text">
+            <input id="frmLink" placeholder="link" type="text">
+            <input id="frmDetail" placeholder="details" type="text">
+            <input id="frmCategory">
+            <input id="frmEndDate" placeholder="endDateTime" type="datetime-local">
+        </form>
+    <button id="frmBtnSave" class="hide" type="button">SaveActivity</button>
+    <table id="tbl-activity">
+        <tr>
+            <th>Activity</th><th>Link</th><th>Start Date</th>
+        </tr>
+    </table>
+    <h3>Recently Completed</h3>
+    <table id="tbl-complete">
+        <tr>
+            <th>Activity</th><th>Link</th><th>Start Date</th><th>End Date</th>
+        </tr>
+    </table>
+    <section id="activity-detail" class="hide">
+
+    </section>
+
+</section>
