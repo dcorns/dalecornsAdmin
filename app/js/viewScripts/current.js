@@ -8,6 +8,13 @@ var clientRoutes = require('../clientRoutes')();
 module.exports = function current(){
   var tblActivity = document.getElementById('tbl-activity');
   var tblComplete = document.getElementById('tbl-complete');
+  let btnActivityMenu = document.getElementById('btn-activity-menu');
+  let activityMenu = document.getElementById('menu-activities-category');
+  btnActivityMenu.addEventListener('click', function(){
+    activityMenu.classList.toggle('hide');
+  });
+  let typeIdx = window.sessionStorage.getItem('typeIndex') || '0';
+  //region Admin Only
   let btnAddNew = document.getElementById('btnAddNew');
   let frmActivity = document.getElementById('frmActivity');
   let frmBtnSave = document.getElementById('frmBtnSave');
@@ -21,7 +28,7 @@ module.exports = function current(){
       activity: document.getElementById('frmActivityLine').value,
       link: document.getElementById('frmLink').value,
       details: document.getElementById('frmDetail').value,
-      type: document.getElementById('frmCategory').value,
+      type: window.sessionStorage.getItem('typeIndex') || '0',
       endDate: document.getElementById('frmEndDate').value
     };
     clientRoutes.saveData('saveActivity', data, function (err, data) {
@@ -32,7 +39,8 @@ module.exports = function current(){
       alert('Activity Saved!');
     })
   });
-  clientRoutes.getData('current', function(err, data){
+  //endregion
+  clientRoutes.getData('current?typeIndex=' + typeIdx, function(err, data){
     if(err){
       alert('No current data stored locally. Internet connection required');
       console.error(err);
@@ -45,10 +53,10 @@ module.exports = function current(){
       console.error(err);
       return;
     }
-    buildMenu(data.json[0].activityCategories, document.getElementById('menu-activities-category'));
+    buildMenu(data.json[0].activityCategories, activityMenu);
   });
 };
-
+//expects tbl to be a tbody element
 function appendActivity(aObj, tbl, isComplete){
   var row = document.createElement('tr');
   var startDate = document.createElement('td');
@@ -79,12 +87,12 @@ function appendActivity(aObj, tbl, isComplete){
   }
   tbl.appendChild(row);
 }
-
+//expects tblNow and tblOld to be tbody elements
 function buildActivityTable(data, tblNow, tblOld){
   //Sort by start date using custom sort compare function
   data = data.json;
   data.sort(function(a, b){
-    return new Date(a.startDate) - new Date(b.startDate);
+    return new Date(b.startDate) - new Date(a.startDate);
   });
   var len = data.length;
   var c = 0;
@@ -116,7 +124,7 @@ function addDetails(rowIn, details){
       detailSection.style.top = `${rect.top + rect.height + scrollY}px`;
       detailSection.style.width = `${rect.width}px`;
       detailSection.innerHTML=row.getAttribute('data-details');
-      detailSection.scrollIntoView();
+      //detailSection.scrollIntoView();
     }
   });
   rowIn.childNodes[0].insertBefore(btn, rowIn.childNodes[0].childNodes[0]);
@@ -129,6 +137,21 @@ function buildMenu(data, menuElement){
     let btn = document.createElement('button');
     btn.textContent = item;
     btn.value = menuCount;
+    btn.addEventListener('click', function(){
+      var tblActivity = document.getElementById('tbl-activity');
+      var tblComplete = document.getElementById('tbl-complete');
+      tblActivity.innerHTML = '';
+      tblComplete.innerHTML = '';
+      window.sessionStorage.setItem('typeIndex', this.value);
+      clientRoutes.getData('current?typeIndex=' + this.value, function(err, data){
+        if(err){
+          alert('No current data stored locally. Internet connection required');
+          console.error(err);
+          return;
+        }
+        buildActivityTable(data, tblActivity, tblComplete);
+      });
+    });
     menuElement.appendChild(btn);
     menuCount++;
   });

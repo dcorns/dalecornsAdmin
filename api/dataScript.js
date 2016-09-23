@@ -23,6 +23,8 @@ module.exports = {
     });
   },
   saveActivity: function(data, cb) {
+    //make sure data.type gets saved as a number
+    data.type = parseInt(data.type, 10);
     cg.dbDocInsert({activity: 'act'}, data, 'currentActivities', function(err, data){
       if(err){
         cb(err, null);

@@ -13,28 +13,33 @@
 </svg>
 
 <section id="current">
-    <h3>Enter Current/Update Activities</h3>
-    <nav id="menu-activities-category"></nav>
+    <h3>Enter Current/Update Activities</h3><button id="btn-activity-menu">Categories</button>
+    <menu id="menu-activities-category" class="hide"></menu>
     <button id="btnAddNew">Add Activity</button>
         <form id="frmActivity" class="hide">
             <input id="frmStartDate" placeholder="startDateTime" type="datetime-local">
-            <input id="frmActivityLine" placeholder="activity" type="text">
+            <input id="frmActivityLine" placeholder="activity" required type="text">
             <input id="frmLink" placeholder="link" type="text">
-            <input id="frmDetail" placeholder="details" type="text">
-            <input id="frmCategory">
+            <textarea id="frmDetail" placeholder="details"></textarea>
             <input id="frmEndDate" placeholder="endDateTime" type="datetime-local">
         </form>
     <button id="frmBtnSave" class="hide" type="button">SaveActivity</button>
-    <table id="tbl-activity">
+    <table>
+        <thead>
         <tr>
             <th>Activity</th><th>Link</th><th>Start Date</th>
         </tr>
+        </thead>
+        <tbody id="tbl-activity"></tbody>
     </table>
     <h3>Recently Completed</h3>
-    <table id="tbl-complete">
+    <table>
+        <thead>
         <tr>
             <th>Activity</th><th>Link</th><th>Start Date</th><th>End Date</th>
         </tr>
+        </thead>
+        <tbody id="tbl-complete"></tbody>
     </table>
     <section id="activity-detail" class="hide">
 

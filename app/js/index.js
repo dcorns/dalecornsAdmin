@@ -16,9 +16,6 @@ var route = require('./viewRouter')(pages, pageScripts, mySkills);//(view, contr
 //load shared and dom objects
 mySkills.sharedObjects.init();
 
-//default view
-route('#/current');
-
 function firstDo(){
   //Handle Refresh by checking session storage for last href and redirecting if it exists
   var lastHref = window.sessionStorage.getItem('href');
