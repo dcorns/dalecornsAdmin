@@ -24,8 +24,14 @@ module.exports = {
   },
   saveActivity: function(data, cb) {
     //make sure data.type gets saved as a number
-    data.type = parseInt(data.type, 10);
-    cg.dbDocInsert({activity: 'act'}, data, 'currentActivities', function(err, data){
+    data.updates.type = parseInt(data.updates.type, 10);
+    //check if it is an update using id_ property
+    if(data.id) cg.dbDocUpdate({_id: data.id}, data.updates, 'currentActivities', function(err, data){
+      console.dir(data);
+      if(err) cb(err, null);
+      else cb(null, data);
+    });
+    else cg.dbDocInsert({activity: 'act'}, data.updates, 'currentActivities', function(err, data){
       if(err){
         cb(err, null);
       }

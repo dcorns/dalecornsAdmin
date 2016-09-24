@@ -23,13 +23,17 @@ module.exports = function current(){
     frmBtnSave.classList.toggle('hide');
   });
   frmBtnSave.addEventListener('click', function(){
+    console.log('updateId', window.localStorage.getItem('updateId'));
     let data = {
-      startDate: document.getElementById('frmStartDate').value,
-      activity: document.getElementById('frmActivityLine').value,
-      link: document.getElementById('frmLink').value,
-      details: document.getElementById('frmDetail').value,
-      type: window.sessionStorage.getItem('typeIndex') || '0',
-      endDate: document.getElementById('frmEndDate').value
+      id: window.localStorage.getItem('updateId'),
+      updates: {
+        startDate: document.getElementById('frmStartDate').value,
+        activity: document.getElementById('frmActivityLine').value,
+        link: document.getElementById('frmLink').value,
+        details: document.getElementById('frmDetail').value,
+        type: window.sessionStorage.getItem('typeIndex') || '0',
+        endDate: document.getElementById('frmEndDate').value
+      }
     };
     clientRoutes.saveData('saveActivity', data, function (err, data) {
       if(err){
@@ -37,6 +41,7 @@ module.exports = function current(){
         return;
       }
       alert('Activity Saved!');
+      window.localStorage.setItem('updateId', '');
     })
   });
   //endregion
@@ -85,6 +90,35 @@ function appendActivity(aObj, tbl, isComplete){
   if(aObj['details']){
     addDetails(row, aObj.details);
   }
+
+  //region Admin Only 2
+  let btnEdit = document.createElement('button');
+  let editColumn = document.createElement('td');
+  btnEdit.textContent = 'EDIT';
+  btnEdit.value = aObj._id;
+  btnEdit.addEventListener('click', function(e){
+    let frmActivity = document.getElementById('frmActivity');
+    let frmBtnSave = document.getElementById('frmBtnSave');
+    let targetRow = document.getElementById(e.target.value);
+    frmActivity.classList.toggle('hide');
+    frmBtnSave.classList.toggle('hide');
+    document.getElementById('frmStartDate').value = targetRow.dataset.startdate;
+    document.getElementById('frmActivityLine').value = targetRow.dataset.activity;
+    document.getElementById('frmLink').value = targetRow.dataset.link;
+    document.getElementById('frmDetail').value = targetRow.dataset.details;
+    document.getElementById('frmEndDate').value = targetRow.dataset.enddate;
+    window.localStorage.setItem('updateId', e.target.value);
+  });
+  editColumn.appendChild(btnEdit);
+  row.appendChild(editColumn);
+  row.id = aObj._id;
+  row.setAttribute('data-startdate', aObj.startDate);
+  row.setAttribute('data-activity', aObj.activity);
+  row.setAttribute('data-link', aObj.link);
+  row.setAttribute('data-enddate', aObj.endDate);
+
+  //endregion
+
   tbl.appendChild(row);
 }
 //expects tblNow and tblOld to be tbody elements
