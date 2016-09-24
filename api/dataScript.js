@@ -27,7 +27,6 @@ module.exports = {
     data.updates.type = parseInt(data.updates.type, 10);
     //check if it is an update using id_ property
     if(data.id) cg.dbDocUpdate({_id: data.id}, data.updates, 'currentActivities', function(err, data){
-      console.dir(data);
       if(err) cb(err, null);
       else cb(null, data);
     });
