@@ -116,22 +116,12 @@ function appendActivity(aObj, tbl, isComplete){
   btnTimeLog.textContent = 'TimeLog';
   btnTimeLog.value = aObj._id;
   btnTimeLog.addEventListener('click', function(e){
-    console.dir(e);
-    document.getElementById('tblTimeLog').classList.toggle('hide');
-    // let tblTimeLog =document.getElementById('tblTimeLog'), tlLen = aObj['timelog'].length, tlI = 0;
-    // for(tlI; tlI < tlLen; tlI++){
-    //   let logRow = document.createElement('tr'), timeCol = document.createElement('td');
-    //   timeCol.innerText = aObj['timelog'][tlI];
-    //   logRow.appendChild(timeCol);
-    //   if(tlI % 2){
-    //     let tdDel = document.createElement('td'), btnDelEntry = document.createElement('button');
-    //     btnDelEntry.value = tlI;
-    //     btnDelEntry.innerText = '-';
-    //     tdDel.appendChild(btnDelEntry);
-    //     logRow.appendChild(tdDel);
-    //     tblTimeLog.appendChild(logRow);
-    //   }
-    // }
+    console.dir(e.target.value);
+    console.dir(e.target.parentElement);
+    let spn = document.createElement('span');
+    spn.id = 'tblhere';
+    e.target.parentElement.appendChild(spn);
+    mySkills.route('time-log-table', 'tblhere');
   });
   editColumn.appendChild(btnTimeLog);
   if(aObj['timelog']){
