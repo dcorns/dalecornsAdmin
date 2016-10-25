@@ -110,6 +110,34 @@ function appendActivity(aObj, tbl, isComplete){
     window.localStorage.setItem('updateId', e.target.value);
   });
   editColumn.appendChild(btnEdit);
+
+  //region Time Log Logic
+  let btnTimeLog = document.createElement('button');
+  btnTimeLog.textContent = 'TimeLog';
+  btnTimeLog.value = aObj._id;
+  btnTimeLog.addEventListener('click', function(e){
+    console.dir(e);
+    document.getElementById('tblTimeLog').classList.toggle('hide');
+    // let tblTimeLog =document.getElementById('tblTimeLog'), tlLen = aObj['timelog'].length, tlI = 0;
+    // for(tlI; tlI < tlLen; tlI++){
+    //   let logRow = document.createElement('tr'), timeCol = document.createElement('td');
+    //   timeCol.innerText = aObj['timelog'][tlI];
+    //   logRow.appendChild(timeCol);
+    //   if(tlI % 2){
+    //     let tdDel = document.createElement('td'), btnDelEntry = document.createElement('button');
+    //     btnDelEntry.value = tlI;
+    //     btnDelEntry.innerText = '-';
+    //     tdDel.appendChild(btnDelEntry);
+    //     logRow.appendChild(tdDel);
+    //     tblTimeLog.appendChild(logRow);
+    //   }
+    // }
+  });
+  editColumn.appendChild(btnTimeLog);
+  if(aObj['timelog']){
+    // display existing data in table or set it up for display
+  }
+  //endregion
   row.appendChild(editColumn);
   row.id = aObj._id;
   row.setAttribute('data-startdate', aObj.startDate);

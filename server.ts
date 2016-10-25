@@ -35,7 +35,7 @@ app.get('/', function (req, res) {
 require('./api/routes')(app);
 
 //if db server had to be started by host, this gives it some time before trying to connect
-setTimeout(function(){corngoose.startDB('drc');}, 10000);
+setTimeout(function(){corngoose.startDB('drc');}, 15000);
 
 
 server = app.listen(server_port, server_ip_address, function(){
