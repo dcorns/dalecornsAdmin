@@ -116,12 +116,20 @@ function appendActivity(aObj, tbl, isComplete){
   btnTimeLog.textContent = 'TimeLog';
   btnTimeLog.value = aObj._id;
   btnTimeLog.addEventListener('click', function(e){
-    console.dir(e.target.value);
-    console.dir(e.target.parentElement);
-    let spn = document.createElement('span');
-    spn.id = 'tblhere';
-    e.target.parentElement.appendChild(spn);
-    mySkills.route('time-log-table', 'tblhere');
+    //If no log table present display it, if it is present remove it and if a different instance of the button was pressed display the table for its respective row.
+    let prevSpn = document.getElementById('tblhere');
+    let sameInstanceOfButtonClicked = false;
+    if(prevSpn){
+      sameInstanceOfButtonClicked = e.target.parentElement == prevSpn.parentElement;
+      prevSpn.parentElement.removeChild(prevSpn);
+    }
+    if(!(sameInstanceOfButtonClicked)){
+      let spn = document.createElement('span');
+      spn.id = 'tblhere';
+      e.target.parentElement.appendChild(spn);
+      //calling a view and its associated script within another mySkills made gobal in index.
+      mySkills.route('time-log-table', 'tblhere');
+    }
   });
   editColumn.appendChild(btnTimeLog);
   if(aObj['timelog']){
