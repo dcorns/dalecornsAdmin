@@ -126,6 +126,7 @@ function appendActivity(aObj, tbl, isComplete){
     if(!(sameInstanceOfButtonClicked)){
       let spn = document.createElement('span');
       spn.id = 'tblhere';
+      console.log(e.target.value);
       e.target.parentElement.appendChild(spn);
       //calling a view and its associated script within another mySkills made gobal in index.
       mySkills.route('time-log-table', 'tblhere');
