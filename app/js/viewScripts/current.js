@@ -124,12 +124,12 @@ function appendActivity(aObj, tbl, isComplete){
       prevSpn.parentElement.removeChild(prevSpn);
     }
     if(!(sameInstanceOfButtonClicked)){
-      let spn = document.createElement('span');
-      spn.id = 'tblhere';
-      console.log(e.target.value);
-      e.target.parentElement.appendChild(spn);
+      let tlDiv = document.createElement('div');
+      tlDiv.id = 'tblhere';
+      tlDiv.value = e.target.value;
+      e.target.parentElement.appendChild(tlDiv);
       //calling a view and its associated script within another mySkills made gobal in index.
-      mySkills.route('time-log-table', 'tblhere');
+      mySkills.route('timeLogTable', 'tblhere');
     }
   });
   editColumn.appendChild(btnTimeLog);
