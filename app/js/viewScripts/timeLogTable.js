@@ -4,7 +4,9 @@
  * Copyright © 2016 Dale Corns
  */
 'use strict';
+let clientRoutes = require('../clientRoutes')();
 let timeLogTableData = {};
+timeLogTableData.timeLogEditData = {};
 let timeLogTableEditView = {};
 timeLogTableEditView.editRow = document.createElement('tr');
 timeLogTableEditView.timeIn = document.createElement('input');
@@ -24,12 +26,17 @@ btnAddNewTimeLog.addEventListener('click', function(e){
   createEditRow();
   tblTimeLog.appendChild(timeLogTableEditView.editRow);
 });
-  timeLogTableEditView.btnSave.addEventListener('click', function(e){
-    timeLogTableData.timeIn = timeLogTableEditView.timeIn.value;
-    timeLogTableData.workPerformed = timeLogTableEditView.workPerformed.value;
-    timeLogTableData.timeOut = timeLogTableEditView.timeOut.value;
-
-    console.dir(timeLogTableData);
+  timeLogTableEditView.btnSave.addEventListener('click', function(){
+    timeLogTableData.timeLogEditData.timeIn = timeLogTableEditView.timeIn.value;
+    timeLogTableData.timeLogEditData.workPerformed = timeLogTableEditView.workPerformed.value;
+    timeLogTableData.timeLogEditData.timeOut = timeLogTableEditView.timeOut.value;
+    clientRoutes.saveData('saveTimeLog', timeLogTableData, function (err, data) {
+      if(err){
+        alert('Error saving data!');
+        return;
+      }
+      alert('Time log entry Saved!');
+    });
   });
 };
 
@@ -42,9 +49,9 @@ function createEditRow(rowIn){
     timeLogTableEditView.workPerformed.setAttribute('type', 'text');
     timeLogTableEditView.timeOut.setAttribute('type', 'datetime-local');
     timeLogTableEditView.btnSave.innerHTML = 'SAVE';
-    timeLogTableData.timeIn = timeLogTableEditView.timeIn.value = '';
-    timeLogTableData.workPerformed = timeLogTableEditView.workPerformed.value = '';
-    timeLogTableData.timeOut = timeLogTableEditView.timeOut.value = '';
+    timeLogTableEditView.timeIn.value = '';
+    timeLogTableEditView.workPerformed.value = '';
+    timeLogTableEditView.timeOut.value = '';
     let tdNewTimeInField = document.createElement('td');
     let tdWorkPerformedField = document.createElement('td');
     let tdNewTimeOutField = document.createElement('td');

@@ -7,7 +7,7 @@
 const cg = require('corngoose');
 const auth = require('cornorize');
 module.exports = {
-  saveProfile: function(token, data, cb) {
+  saveProfile: function saveProfile(token, data, cb) {
     var aboutMe = {mainHeader: data.aboutMeHeader, subText: data.aboutMe};
     isValidProfile(token, data.profileId, function(result) {
       if (result) {
@@ -22,7 +22,7 @@ module.exports = {
       }
     });
   },
-  saveActivity: function(data, cb) {
+  saveActivity: function saveActivity(data, cb) {
     //make sure data.type gets saved as a number
     data.updates.type = parseInt(data.updates.type, 10);
     //check if it is an update using id_ property
@@ -37,6 +37,29 @@ module.exports = {
       else{
         cb(null, data);
       }
+    });
+  },
+  saveTimeLog: function saveTimeLog(data, cb){
+    cg.dbDocFind({_id: data.id}, 'currentActivities', function(err, docData){
+      if(err) {
+        console.dir(err);
+        cb(err, null);
+      }
+      if(docData[0].timeLogs){
+        docData[0].timeLogs.push(data.timeLogEditData);
+      }
+      else{
+        docData[0].timeLogs = [data.timeLogEditData];
+      }
+      cg.dbDocUpdate({_id: data.id}, {timeLogs: docData[0].timeLogs}, 'currentActivities', function(err, updateData){
+        if(err) {
+          console.dir(err);
+          cb(err, null);
+        }
+        else {
+          cb(null, updateData);
+        }
+      });
     });
   }
 

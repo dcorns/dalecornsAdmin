@@ -45,7 +45,18 @@ module.exports = function(app){
       }
     });
   });
-
+  app.post('/saveTimeLog', function(req, res, next){
+    dataScript.saveTimeLog(req.body, function(err, data){
+      if(err) {
+        playErr(res, new Error('There was a problem saving time log'));
+        res.status(302);
+      }
+      else{
+        res.status(201); //do-ajax expects a 201 or it will interpret status as an error
+        res.send(data);
+      }
+    });
+  });
   app.get('/skills', function (req, res, next){
     corngoose.getCollection('competencies', function(err, data){
       res.status(200);

@@ -22,7 +22,6 @@ module.exports = function clientRoutes(){
       }, token);
     },
     saveData: function(path, data, cb){
-      console.dir(data);
       doAjax.ajaxPostJson('/' + path, data, function(err, data){
         if(err){
           console.error(err);
