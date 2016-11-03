@@ -18,6 +18,8 @@ module.exports = function timeLogTable() {
   let btnAddNewTimeLog = document.getElementById('btnAddNewTimeLog');
   let btnSaveNewTimeLog = document.getElementById('btnSaveNewTimeLog');
   let tblTimeLog = document.getElementById('timeLogTable');
+  //loadTimeLogData(tblTimeLog, window.localStorage.getItem(current).id or index of activity. timeLog if it exists )
+  //Get current activities from local.storage
   //Event listeners***********************************************
 btnAddNewTimeLog.addEventListener('click', function(e){
   btnAddNewTimeLog.className = 'hide';
@@ -64,5 +66,14 @@ function createEditRow(rowIn){
     timeLogTableEditView.editRow.appendChild(tdWorkPerformedField);
     timeLogTableEditView.editRow.appendChild(tdNewTimeOutField);
     timeLogTableEditView.editRow.appendChild(tdbtnField);
+  }
+}
+
+function loadTimeLogData(tbl, data){
+  console.log(tbl);
+  console.dir(data);
+  let i = 0, ln = data.length;
+  for(i; i < ln; i++){
+
   }
 }
