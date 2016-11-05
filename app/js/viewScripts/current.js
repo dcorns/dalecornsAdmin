@@ -51,6 +51,7 @@ module.exports = function current(){
       console.error(err);
       return;
     }
+    window.localStorage.setItem('current', JSON.stringify(data));
     buildActivityTable(data, tblActivity, tblComplete);
   });
   clientRoutes.getData('currentCategoryMenu', function(err, data){
@@ -62,13 +63,13 @@ module.exports = function current(){
   });
 };
 //expects tbl to be a tbody element
-function appendActivity(aObj, tbl, isComplete){
+function appendActivity(aObj, tbl, hasEndDate){
   var row = document.createElement('tr');
   var startDate = document.createElement('td');
   var activityLink = document.createElement('td');
   var activity = document.createElement('td');
   activity.innerText = aObj.activity;
-  var endDate = isComplete ? document.createElement('td') : null;
+  var endDate = hasEndDate ? document.createElement('td') : null;
   startDate.innerText = new Date(aObj.startDate).toLocaleDateString();
   if(aObj.link){
     var anchor = document.createElement('a'), anchorIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg'), anchorUse = document.createElementNS('http://www.w3.org/2000/svg', 'use');
@@ -114,7 +115,7 @@ function appendActivity(aObj, tbl, isComplete){
   //region Time Log Logic
   let btnTimeLog = document.createElement('button');
   btnTimeLog.textContent = 'TimeLog';
-  btnTimeLog.value = aObj._id;
+  btnTimeLog.setAttribute('data-index', aObj.idx);
   btnTimeLog.addEventListener('click', function(e){
     //If no log table present display it, if it is present remove it and if a different instance of the button was pressed display the table for its respective row.
     let prevSpn = document.getElementById('tblhere');
@@ -127,18 +128,16 @@ function appendActivity(aObj, tbl, isComplete){
       let tlDiv = document.createElement('div');
       tlDiv.id = 'tblhere';
       tlDiv.value = e.target.value;
+      tlDiv.setAttribute('data-index', e.target.dataset.index);
       e.target.parentElement.appendChild(tlDiv);
       //calling a view and its associated script within another mySkills made gobal in index.
       mySkills.route('timeLogTable', 'tblhere');
     }
   });
   editColumn.appendChild(btnTimeLog);
-  if(aObj['timelog']){
-    // display existing data in table or set it up for display
-  }
   //endregion
   row.appendChild(editColumn);
-  row.id = aObj._id;
+  row.id = aObj.idx;
   row.setAttribute('data-startdate', aObj.startDate);
   row.setAttribute('data-activity', aObj.activity);
   row.setAttribute('data-link', aObj.link);
@@ -152,18 +151,20 @@ function appendActivity(aObj, tbl, isComplete){
 function buildActivityTable(data, tblNow, tblOld){
   //Sort by start date using custom sort compare function
   data = data.json;
-  data.sort(function(a, b){
+  let splitData = splitAndIndexData(data);
+  splitData.incomplete.sort(function(a, b){
     return new Date(b.startDate) - new Date(a.startDate);
   });
-  var len = data.length;
-  var c = 0;
+  splitData.complete.sort(function(a, b){
+    return new Date(b.endDate) - new Date(a.endDate);
+  });
+  var len = splitData.incomplete.length, c = 0;
   for(c; c < len; c++){
-    if(!(data[c].endDate)){
-      appendActivity(data[c], tblNow, false);
-    }
-    else{
-      appendActivity(data[c], tblOld, true);
-    }
+    appendActivity(splitData.incomplete[c], tblNow, false);
+  }
+  len = splitData.complete.length; c = 0;
+  for(c; c < len; c++){
+    appendActivity(splitData.complete[c], tblOld, true);
   }
 }
 //addDetails
@@ -210,10 +211,19 @@ function buildMenu(data, menuElement){
           console.error(err);
           return;
         }
+        window.localStorage.setItem('current', JSON.stringify(data));
         buildActivityTable(data, tblActivity, tblComplete);
       });
     });
     menuElement.appendChild(btn);
     menuCount++;
   });
+}
+function splitAndIndexData(data){
+  let i = 0, len = data.length, noEndDate = [], hasEndDate = [];
+  for(i; i < len; i++){
+    data[i].idx = i;
+    data[i].endDate ? hasEndDate.push(data[i]) : noEndDate.push(data[i]);
+  }
+  return {incomplete: noEndDate, complete: hasEndDate};
 }

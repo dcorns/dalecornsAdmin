@@ -1,10 +1,14 @@
 /**
- * index
+ * index.js
  * Created by dcorns on 12/31/15
  * Copyright © 2015 Dale Corns
  */
 'use strict';
-//Main JS File
+/**
+ * @module index.js
+ * Client entry point
+ */
+
 var mySkills = {};
 mySkills.sharedObjects = require('./sharedObjects');
 var doAjax = require('do-ajax');
@@ -16,7 +20,9 @@ mySkills.route = route;
 window.mySkills = mySkills;
 //load shared and dom objects
 mySkills.sharedObjects.init();
-
+/**
+ * @for firstDo
+ */
 function firstDo(){
   //Handle Refresh by checking session storage for last href and redirecting if it exists
   var lastHref = window.sessionStorage.getItem('href');

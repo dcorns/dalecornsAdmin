@@ -17,8 +17,10 @@ timeLogTableEditView.btnSave = document.createElement('button');
 module.exports = function timeLogTable() {
   let btnAddNewTimeLog = document.getElementById('btnAddNewTimeLog');
   let btnSaveNewTimeLog = document.getElementById('btnSaveNewTimeLog');
-  let tblTimeLog = document.getElementById('timeLogTable');
-  //loadTimeLogData(tblTimeLog, window.localStorage.getItem(current).id or index of activity. timeLog if it exists )
+  let tblTimeLog = document.getElementById('tblTimeLog');
+  let dataIndex = tblTimeLog.parentElement.parentElement.dataset.index;
+  timeLogTableData.rowData = JSON.parse(window.localStorage.getItem('current')).json[dataIndex].timeLogs;
+  loadTimeLogData(tblTimeLog, timeLogTableData.rowData);
   //Get current activities from local.storage
   //Event listeners***********************************************
 btnAddNewTimeLog.addEventListener('click', function(e){
@@ -70,10 +72,16 @@ function createEditRow(rowIn){
 }
 
 function loadTimeLogData(tbl, data){
-  console.log(tbl);
-  console.dir(data);
   let i = 0, ln = data.length;
   for(i; i < ln; i++){
-
+    let row = document.createElement('row');
+    let tdTimeIn = document.createElement('td');
+    let tdTimeOut = document.createElement('td');
+    let tdWorkPerformed = document.createElement('td');
+    tdTimeIn.innerText = data[i].timeIn;
+    tdTimeOut.innerText = data[i].timeOut;
+    tdWorkPerformed.innerText = data[i].workPerformed;
+    row.appendChild(tdTimeIn); row.appendChild(tdWorkPerformed); row.appendChild(tdTimeOut);
+    tbl.appendChild(row);
   }
 }

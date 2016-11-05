@@ -1,0 +1,9 @@
+{"name": "dalecornsAdmin",
+"description": "Content management application for dalecorns.com",
+"version": "0.0.5",
+"options": {
+  "paths": ["./api", "./app"],
+  "outdir": "documentation",
+  "linkNatives": "true"
+}
+}
