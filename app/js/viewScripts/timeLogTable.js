@@ -18,7 +18,7 @@ module.exports = function timeLogTable() {
   let btnAddNewTimeLog = document.getElementById('btnAddNewTimeLog');
   let btnSaveNewTimeLog = document.getElementById('btnSaveNewTimeLog');
   let tblTimeLog = document.getElementById('tblTimeLog');
-  let dataIndex = tblTimeLog.parentElement.parentElement.dataset.index;
+  let dataIndex = tblTimeLog.parentElement.parentElement.parentElement.dataset.index;
   timeLogTableData.rowData = JSON.parse(window.localStorage.getItem('current')).json[dataIndex].timeLogs;
   loadTimeLogData(tblTimeLog, timeLogTableData.rowData);
   //Get current activities from local.storage
