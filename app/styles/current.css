@@ -5,27 +5,27 @@
 #current table{
     width: 80%;
 }
-/*#current th{*/
-    /*text-align: left;*/
-/*}*/
-/*#current td{*/
-    /*text-align: left;*/
-    /*width: 5vw;*/
-    /*height: 5vw;*/
-/*}*/
-/*#current tr, td:nth-child(1){*/
-    /*background-color: #ddffdd;*/
-/*}*/
-/*#current td:nth-child(2){*/
-    /*background-color: #ddffa3;*/
-    /*width: 5%;*/
-/*}*/
-/*#current td:nth-child(2):hover{*/
-    /*border-radius: 80%;*/
-/*}*/
-/*#current td:nth-child(3){*/
-    /*background-color: #ddffdd;*/
-/*}*/
+#current table th{
+    text-align: left;
+}
+#current table td{
+    text-align: left;
+    width: 5vw;
+    height: 5vw;
+}
+#current table tr, td:nth-child(1){
+    background-color: #ddffdd;
+}
+#current table td:nth-child(2){
+    background-color: #ddffa3;
+    width: 5%;
+}
+#current table td:nth-child(2):hover{
+    border-radius: 80%;
+}
+#current table td:nth-child(3){
+    background-color: #ddffdd;
+}
 #current .icon{
     fill: green;
 }

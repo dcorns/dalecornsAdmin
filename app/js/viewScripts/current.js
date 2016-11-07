@@ -92,7 +92,7 @@ function appendActivity(aObj, tbl, hasEndDate){
     addDetails(row, aObj.details);
   }
 
-  //region Admin Only 2
+  //region Admin Only
   let btnEdit = document.createElement('button');
   let editColumn = document.createElement('td');
   btnEdit.textContent = 'EDIT';
@@ -128,8 +128,9 @@ function appendActivity(aObj, tbl, hasEndDate){
       let tlDiv = document.createElement('div');
       tlDiv.id = 'tblhere';
       tlDiv.value = e.target.value;
+      tlDiv.className='tblTimeLogContainer';
       tlDiv.setAttribute('data-index', e.target.dataset.index);
-      e.target.parentElement.appendChild(tlDiv);
+      e.target.parentElement.parentElement.appendChild(tlDiv);
       //calling a view and its associated script within another mySkills made gobal in index.
       mySkills.route('timeLogTable', 'tblhere');
     }
@@ -167,30 +168,25 @@ function buildActivityTable(data, tblNow, tblOld){
     appendActivity(splitData.complete[c], tblOld, true);
   }
 }
-//addDetails
-//Uses the activity-detail element from current.html and the hide class from layout.css
-//Receives a tr element and activity details text
-//prepends a button to click for details on the first td of the tr and adds an event listener to display or hide the details below the row when the button is clicked.
+
+/**
+ * @function addDetails
+ * Prepends a button to click for details on the first td of the rowIn. Adds a data-details attribute to rowIn and sets its value to details. Adds an event listener to toggle display of the details below the row when the button is clicked. Depends on tableInsertView
+ * @param rowIn tr
+ * @param details String
+ */
 function addDetails(rowIn, details){
   let btn = document.createElement('button');
   btn.textContent = '*';
   rowIn.setAttribute('data-details', details);
-
+// Load data from target's parentNode.parentNode data-detail attribute into the innerHTML of the DOM node with the id of activity-detail. Calls tableInsertView to display at below the row where the target resides.
   btn.addEventListener('click', function(){
     let detailSection = document.getElementById('activity-detail');
-    detailSection.classList.toggle('hide');
-    if(!(detailSection.classList.contains('hide'))){
-      let row = this.parentNode.parentNode;
-      let rect = row.getBoundingClientRect();
-      detailSection.style.left = `${rect.left + scrollX}px`;
-      detailSection.style.top = `${rect.top + rect.height + scrollY}px`;
-      detailSection.style.width = `${rect.width}px`;
-      detailSection.innerHTML=row.getAttribute('data-details');
-      //detailSection.scrollIntoView();
-    }
+    let row = this.parentNode.parentNode;
+    detailSection.innerHTML = row.getAttribute('data-details');
+    tableInsertView(detailSection, row);
   });
   rowIn.childNodes[0].insertBefore(btn, rowIn.childNodes[0].childNodes[0]);
-  //rowIn.childNodes[0].innerHTML = btn.outerHTML + rowIn.childNodes[0].innerHTML;
 }
 
 function buildMenu(data, menuElement){
@@ -226,4 +222,20 @@ function splitAndIndexData(data){
     data[i].endDate ? hasEndDate.push(data[i]) : noEndDate.push(data[i]);
   }
   return {incomplete: noEndDate, complete: hasEndDate};
+}
+/**
+ * @function tableInsertView
+ * Take in a DOM nade view and a DOM node row. Toggle insert or remove view after the row.
+ * Depends on layout css hide class
+ * @param viewIn
+ * @param insertRow
+ */
+function tableInsertView(viewIn, insertRow){
+  viewIn.classList.toggle('hide');
+  if(!(viewIn.classList.contains('hide'))) {
+    let rect = insertRow.getBoundingClientRect();
+    viewIn.style.left = `${rect.left + scrollX}px`;
+    viewIn.style.top = `${rect.top + rect.height + scrollY}px`;
+    viewIn.style.width = `${rect.width}px`;
+  }
 }

@@ -74,7 +74,7 @@ function createEditRow(rowIn){
 function loadTimeLogData(tbl, data){
   let i = 0, ln = data.length;
   for(i; i < ln; i++){
-    let row = document.createElement('row');
+    let row = document.createElement('tr');
     let tdTimeIn = document.createElement('td');
     let tdTimeOut = document.createElement('td');
     let tdWorkPerformed = document.createElement('td');
