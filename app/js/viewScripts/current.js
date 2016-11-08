@@ -7,13 +7,12 @@
 'use strict';
 //var clientRoutes = require('../clientRoutes')();
 module.exports = function current(){
-  var tblActivity = document.getElementById('tbl-activity');
-  var tblComplete = document.getElementById('tbl-complete');
   let btnActivityMenu = document.getElementById('btn-activity-menu');
   let activityMenu = document.getElementById('menu-activities-category');
   btnActivityMenu.addEventListener('click', function(){
     activityMenu.classList.toggle('hide');
   });
+  if (!(parseInt(window.sessionStorage.getItem('typeIndex'), 10))) window.sessionStorage.setItem('typeIndex', '0');
   let typeIdx = window.sessionStorage.getItem('typeIndex') || '0';
   //region Admin Only
   let btnAddNew = document.getElementById('btnAddNew');
@@ -24,7 +23,6 @@ module.exports = function current(){
     frmBtnSave.classList.toggle('hide');
   });
   frmBtnSave.addEventListener('click', function(){
-    console.log('updateId', window.localStorage.getItem('updateId'));
     let data = {
       id: window.localStorage.getItem('updateId'),
       updates: {
@@ -42,10 +40,24 @@ module.exports = function current(){
         return;
       }
       alert('Activity Saved!');
-      window.localStorage.setItem('updateId', '');
+      window.localStorage.setItem('updateId', 'newSaved');
+      updateView();
     })
   });
   //endregion
+  mySkills.clientRoutes.getData('currentCategoryMenu', function(err, data){
+    if(err){
+      console.error(err);
+      return;
+    }
+    buildMenu(data.json[0].activityCategories, activityMenu);
+  });
+  updateView();
+};
+function updateView(){
+  let typeIdx = window.sessionStorage.getItem('typeIndex') || '0';
+  var tblActivity = document.getElementById('tbl-activity');
+  var tblComplete = document.getElementById('tbl-complete');
   mySkills.clientRoutes.getData('current?typeIndex=' + typeIdx, function(err, data){
     if(err){
       alert('No current data stored locally. Internet connection required');
@@ -55,14 +67,7 @@ module.exports = function current(){
     window.localStorage.setItem('current', JSON.stringify(data));
     buildActivityTable(data, tblActivity, tblComplete);
   });
-  mySkills.clientRoutes.getData('currentCategoryMenu', function(err, data){
-    if(err){
-      console.error(err);
-      return;
-    }
-    buildMenu(data.json[0].activityCategories, activityMenu);
-  });
-};
+}
 //expects tbl to be a tbody element
 function appendActivity(aObj, tbl, hasEndDate){
   var row = document.createElement('tr');
@@ -192,15 +197,16 @@ function buildMenu(data, menuElement){
       tblActivity.innerHTML = '';
       tblComplete.innerHTML = '';
       window.sessionStorage.setItem('typeIndex', this.value);
-      mySkills.clientRoutes.getData('current?typeIndex=' + this.value, function(err, data){
-        if(err){
-          alert('No current data stored locally. Internet connection required');
-          console.error(err);
-          return;
-        }
-        window.localStorage.setItem('current', JSON.stringify(data));
-        buildActivityTable(data, tblActivity, tblComplete);
-      });
+      updateView();
+      // mySkills.clientRoutes.getData('current?typeIndex=' + this.value, function(err, data){
+      //   if(err){
+      //     alert('No current data stored locally. Internet connection required');
+      //     console.error(err);
+      //     return;
+      //   }
+      //   window.localStorage.setItem('current', JSON.stringify(data));
+      //   buildActivityTable(data, tblActivity, tblComplete);
+      // });
     });
     menuElement.appendChild(btn);
     menuCount++;
@@ -232,7 +238,7 @@ function tableInsertView(viewIn, insertRow){
 }
 function btnEditEventHandler(e) {
   if(window.localStorage.getItem('updateId') === 'updated'){
-
+    updateView();
   }
   let rowAndDataId = e.target.dataset.dataid;
   let view = document.getElementById('activity-edit');
