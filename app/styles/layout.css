@@ -37,8 +37,11 @@
     input:required{
         border-width: 3px;
     }
-    .hide {
-        display: none;
+    .maxLength {
+        width: 100%;
+    }
+    .absolute{
+        position: absolute;
     }
     .show{
         display: inline-block;

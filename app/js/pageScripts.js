@@ -9,5 +9,6 @@
 module.exports = {
     current: require('./viewScripts/current'),
     myProfile: require('./viewScripts/myProfile'),
-    timeLogTable: require('./viewScripts/timeLogTable')
+    timeLogTable: require('./viewScripts/timeLogTable'),
+    activityEdit: require('./viewScripts/activityEdit')
   };

@@ -89,29 +89,12 @@ function appendActivity(aObj, tbl, hasEndDate){
     row.appendChild(endDate);
   }
   if(aObj['details']){
-    addDetails(row, aObj.details);
+    addDetails(row, aObj.details, 'activity-detail');
   }
 
   //region Admin Only
-  let btnEdit = document.createElement('button');
-  let editColumn = document.createElement('td');
-  btnEdit.textContent = 'EDIT';
-  btnEdit.value = aObj._id;
-  btnEdit.addEventListener('click', function(e){
-    let frmActivity = document.getElementById('frmActivity');
-    let frmBtnSave = document.getElementById('frmBtnSave');
-    let targetRow = document.getElementById(e.target.value);
-    frmActivity.classList.toggle('hide');
-    frmBtnSave.classList.toggle('hide');
-    document.getElementById('frmStartDate').value = targetRow.dataset.startdate;
-    document.getElementById('frmActivityLine').value = targetRow.dataset.activity;
-    document.getElementById('frmLink').value = targetRow.dataset.link;
-    document.getElementById('frmDetail').value = targetRow.dataset.details;
-    document.getElementById('frmEndDate').value = targetRow.dataset.enddate;
-    window.localStorage.setItem('updateId', e.target.value);
-  });
-  editColumn.appendChild(btnEdit);
-
+  let btnColumn = document.createElement('td');
+  addActivityEditing(aObj.idx, row, btnColumn);
   //region Time Log Logic
   let btnTimeLog = document.createElement('button');
   btnTimeLog.textContent = 'TimeLog';
@@ -135,9 +118,9 @@ function appendActivity(aObj, tbl, hasEndDate){
       mySkills.route('timeLogTable', 'tblhere');
     }
   });
-  editColumn.appendChild(btnTimeLog);
+  //btnColumn.appendChild(btnTimeLog);
   //endregion
-  row.appendChild(editColumn);
+  row.appendChild(btnColumn);
   row.id = aObj.idx;
   row.setAttribute('data-startdate', aObj.startDate);
   row.setAttribute('data-activity', aObj.activity);
@@ -171,24 +154,31 @@ function buildActivityTable(data, tblNow, tblOld){
 
 /**
  * @function addDetails
- * Prepends a button to click for details on the first td of the rowIn. Adds a data-details attribute to rowIn and sets its value to details. Adds an event listener to toggle display of the details below the row when the button is clicked. Depends on tableInsertView
+ * Prepends a button to click for details on the first td of the rowIn. Adds a data-details attribute to rowIn and sets its value to details. Adds an event listener to set the innerHTML of the element with the id of viewContainer to data-details and toggle display of viewContainer below the row when the button is clicked. Depends on tableInsertView
  * @param rowIn tr
  * @param details String
+ * @param viewContainer
  */
-function addDetails(rowIn, details){
+function addDetails(rowIn, details, viewContainer){
   let btn = document.createElement('button');
   btn.textContent = '*';
   rowIn.setAttribute('data-details', details);
 // Load data from target's parentNode.parentNode data-detail attribute into the innerHTML of the DOM node with the id of activity-detail. Calls tableInsertView to display at below the row where the target resides.
   btn.addEventListener('click', function(){
-    let detailSection = document.getElementById('activity-detail');
+    let detailSection = document.getElementById(viewContainer);
     let row = this.parentNode.parentNode;
     detailSection.innerHTML = row.getAttribute('data-details');
     tableInsertView(detailSection, row);
   });
   rowIn.childNodes[0].insertBefore(btn, rowIn.childNodes[0].childNodes[0]);
 }
-
+function addActivityEditing(dataId, rowIn, elIn){
+  let btnEdit = document.createElement('button');
+  btnEdit.textContent = 'EDIT';
+  btnEdit.setAttribute('data-dataid', dataId);
+  btnEdit.addEventListener('click', btnEditEventHandler);
+  elIn.appendChild(btnEdit);
+}
 function buildMenu(data, menuElement){
   var menuCount = 0;
   data.forEach(function(item){
@@ -225,8 +215,8 @@ function splitAndIndexData(data){
 }
 /**
  * @function tableInsertView
- * Take in a DOM nade view and a DOM node row. Toggle insert or remove view after the row.
- * Depends on layout css hide class
+ * Take in a DOM nade view and a DOM node tr. Toggle insert or remove view after the tr.
+ * Depends on layout css hide class and that the viewIn nade be assigned absolute positioning
  * @param viewIn
  * @param insertRow
  */
@@ -238,4 +228,12 @@ function tableInsertView(viewIn, insertRow){
     viewIn.style.top = `${rect.top + rect.height + scrollY}px`;
     viewIn.style.width = `${rect.width}px`;
   }
+}
+function btnEditEventHandler(e) {
+  let rowAndDataId = e.target.dataset.dataid;
+  let view = document.getElementById('activity-edit');
+  view.setAttribute('data-dataid', rowAndDataId);
+  let row = document.getElementById(rowAndDataId);
+  mySkills.route('activityEdit', 'activity-edit');
+  tableInsertView(view, row);
 }

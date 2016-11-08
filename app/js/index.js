@@ -17,6 +17,7 @@ var pages = require('./build/views');
 var pageScripts = require('./pageScripts');
 var route = require('./viewRouter')(pages, pageScripts, mySkills);//(view, controller, app)
 mySkills.route = route;
+mySkills.clientRoutes = require('./clientRoutes')();
 window.mySkills = mySkills;
 //load shared and dom objects
 mySkills.sharedObjects.init();
