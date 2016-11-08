@@ -2,9 +2,10 @@
  * current
  * Created by dcorns on 2/9/16
  * Copyright © 2016 Dale Corns
+ * Depends on global mySkills
  */
 'use strict';
-var clientRoutes = require('../clientRoutes')();
+//var clientRoutes = require('../clientRoutes')();
 module.exports = function current(){
   var tblActivity = document.getElementById('tbl-activity');
   var tblComplete = document.getElementById('tbl-complete');
@@ -35,7 +36,7 @@ module.exports = function current(){
         endDate: document.getElementById('frmEndDate').value
       }
     };
-    clientRoutes.saveData('saveActivity', data, function (err, data) {
+    mySkills.clientRoutes.saveData('saveActivity', data, function (err, data) {
       if(err){
         alert('Error saving data!');
         return;
@@ -45,7 +46,7 @@ module.exports = function current(){
     })
   });
   //endregion
-  clientRoutes.getData('current?typeIndex=' + typeIdx, function(err, data){
+  mySkills.clientRoutes.getData('current?typeIndex=' + typeIdx, function(err, data){
     if(err){
       alert('No current data stored locally. Internet connection required');
       console.error(err);
@@ -54,7 +55,7 @@ module.exports = function current(){
     window.localStorage.setItem('current', JSON.stringify(data));
     buildActivityTable(data, tblActivity, tblComplete);
   });
-  clientRoutes.getData('currentCategoryMenu', function(err, data){
+  mySkills.clientRoutes.getData('currentCategoryMenu', function(err, data){
     if(err){
       console.error(err);
       return;
@@ -191,7 +192,7 @@ function buildMenu(data, menuElement){
       tblActivity.innerHTML = '';
       tblComplete.innerHTML = '';
       window.sessionStorage.setItem('typeIndex', this.value);
-      clientRoutes.getData('current?typeIndex=' + this.value, function(err, data){
+      mySkills.clientRoutes.getData('current?typeIndex=' + this.value, function(err, data){
         if(err){
           alert('No current data stored locally. Internet connection required');
           console.error(err);
@@ -230,6 +231,9 @@ function tableInsertView(viewIn, insertRow){
   }
 }
 function btnEditEventHandler(e) {
+  if(window.localStorage.getItem('updateId') === 'updated'){
+
+  }
   let rowAndDataId = e.target.dataset.dataid;
   let view = document.getElementById('activity-edit');
   view.setAttribute('data-dataid', rowAndDataId);

@@ -5,7 +5,6 @@
  */
 'use strict';
 module.exports = function activityEdit(){
-  console.log('activityEdit');
   let self = document.getElementById('activityEdit');
   let dataIndex = self.parentElement.dataset.dataid;
   let data = JSON.parse(window.localStorage.getItem('current')).json[dataIndex];
@@ -37,7 +36,7 @@ module.exports = function activityEdit(){
         return;
       }
       alert('Activity Saved!');
-      window.localStorage.setItem('updateId', '');
+      window.localStorage.setItem('updateId', 'updated');
     })
   });
 };
