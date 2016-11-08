@@ -24,7 +24,7 @@ module.exports = function current(){
   });
   frmBtnSave.addEventListener('click', function(){
     let data = {
-      id: window.localStorage.getItem('updateId'),
+      id: 0,
       updates: {
         startDate: document.getElementById('frmStartDate').value,
         activity: document.getElementById('frmActivityLine').value,
@@ -65,10 +65,19 @@ function updateView(){
       return;
     }
     window.localStorage.setItem('current', JSON.stringify(data));
-    buildActivityTable(data, tblActivity, tblComplete);
+    tblActivity.innerHTML = '';
+    tblComplete.innerHTML = '';
+    buildActivityTable(data.json, tblActivity, tblComplete);
   });
 }
-//expects tbl to be a tbody element
+/**
+ * @function appendActivity
+ * Adds an activity row with activity data and link style to a table
+ * Depends on 'icon' class, svg '#icon-link', functions 'addActivityEditing' and 'addDetails', and section 'activty-detail'
+ * @param aObj
+ * @param tbl
+ * @param hasEndDate
+ */
 function appendActivity(aObj, tbl, hasEndDate){
   var row = document.createElement('tr');
   var startDate = document.createElement('td');
@@ -100,7 +109,7 @@ function appendActivity(aObj, tbl, hasEndDate){
 
   //region Admin Only
   let btnColumn = document.createElement('td');
-  addActivityEditing(aObj.idx, row, btnColumn);
+  addActivityEditing(aObj.idx, btnColumn);
   //region Time Log Logic
   let btnTimeLog = document.createElement('button');
   btnTimeLog.textContent = 'TimeLog';
@@ -137,10 +146,16 @@ function appendActivity(aObj, tbl, hasEndDate){
 
   tbl.appendChild(row);
 }
-//expects tblNow and tblOld to be tbody elements
+/**
+ * @function buildActivityTables
+ * Builds the completed and incomplete activity tables
+ * Depends on the splitAndIndexData and appendActivity table
+ * @param data
+ * @param tblNow
+ * @param tblOld
+ */
 function buildActivityTable(data, tblNow, tblOld){
   //Sort by start date using custom sort compare function
-  data = data.json;
   let splitData = splitAndIndexData(data);
   splitData.incomplete.sort(function(a, b){
     return new Date(b.startDate) - new Date(a.startDate);
@@ -157,7 +172,6 @@ function buildActivityTable(data, tblNow, tblOld){
     appendActivity(splitData.complete[c], tblOld, true);
   }
 }
-
 /**
  * @function addDetails
  * Prepends a button to click for details on the first td of the rowIn. Adds a data-details attribute to rowIn and sets its value to details. Adds an event listener to set the innerHTML of the element with the id of viewContainer to data-details and toggle display of viewContainer below the row when the button is clicked. Depends on tableInsertView
@@ -178,40 +192,45 @@ function addDetails(rowIn, details, viewContainer){
   });
   rowIn.childNodes[0].insertBefore(btn, rowIn.childNodes[0].childNodes[0]);
 }
-function addActivityEditing(dataId, rowIn, elIn){
+/**
+ * @function addActivityEditing
+ * Defines and places the edit button
+ * @param dataId
+ * @param elIn
+ */
+function addActivityEditing(dataId, elIn){
   let btnEdit = document.createElement('button');
   btnEdit.textContent = 'EDIT';
   btnEdit.setAttribute('data-dataid', dataId);
   btnEdit.addEventListener('click', btnEditEventHandler);
   elIn.appendChild(btnEdit);
 }
+/**
+ * @function buildMenu
+ * Provides a means of switching between activity categories and provides the currently selected category to the rest of the current module. Depends on updateView function.
+ * @param data
+ * @param menuElement
+ */
 function buildMenu(data, menuElement){
-  var menuCount = 0;
+  var menuIndex = 0;
   data.forEach(function(item){
     let btn = document.createElement('button');
     btn.textContent = item;
-    btn.value = menuCount;
+    btn.value = menuIndex;
     btn.addEventListener('click', function(){
-      var tblActivity = document.getElementById('tbl-activity');
-      var tblComplete = document.getElementById('tbl-complete');
-      tblActivity.innerHTML = '';
-      tblComplete.innerHTML = '';
       window.sessionStorage.setItem('typeIndex', this.value);
       updateView();
-      // mySkills.clientRoutes.getData('current?typeIndex=' + this.value, function(err, data){
-      //   if(err){
-      //     alert('No current data stored locally. Internet connection required');
-      //     console.error(err);
-      //     return;
-      //   }
-      //   window.localStorage.setItem('current', JSON.stringify(data));
-      //   buildActivityTable(data, tblActivity, tblComplete);
-      // });
     });
     menuElement.appendChild(btn);
-    menuCount++;
+    menuIndex++;
   });
 }
+/**
+ * @function splitAndIndexData
+ * Separates data by data[i].endDate and add its index within the array to it.
+ * @param data
+ * @returns {{incomplete: Array, complete: Array}}
+ */
 function splitAndIndexData(data){
   let i = 0, len = data.length, noEndDate = [], hasEndDate = [];
   for(i; i < len; i++){
@@ -236,6 +255,12 @@ function tableInsertView(viewIn, insertRow){
     viewIn.style.width = `${rect.width}px`;
   }
 }
+/**
+ * @function btnEditEventHandler
+ * Event handler for edit button. Loads the activityEdit component and updates the view if edit saved
+ * Depends on locaStorage 'updateId', mySkills global, section 'activity-edit', and tableInsertView, updateView functions
+ * @param e
+ */
 function btnEditEventHandler(e) {
   if(window.localStorage.getItem('updateId') === 'updated'){
     updateView();
