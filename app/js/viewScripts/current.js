@@ -72,8 +72,8 @@ function updateView(){
 }
 /**
  * @function appendActivity
- * Adds an activity row with activity data and link style to a table
- * Depends on 'icon' class, svg '#icon-link', functions 'addActivityEditing' and 'addDetails', and section 'activty-detail'
+ * Adds an activity row with activity data.
+ * Depends on functions 'addActivityEditing', 'buildActivityLink' and 'addDetails', and section 'activty-detail'
  * @param aObj
  * @param tbl
  * @param hasEndDate
@@ -87,15 +87,8 @@ function appendActivity(aObj, tbl, hasEndDate){
   var endDate = hasEndDate ? document.createElement('td') : null;
   startDate.innerText = new Date(aObj.startDate).toLocaleDateString();
   if(aObj.link){
-    var anchor = document.createElement('a'), anchorIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg'), anchorUse = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-    anchor.href = aObj.link;
-    anchorIcon.setAttribute('class', 'icon');
-    anchorUse.setAttributeNS('http://www.w3.org/1999/xlink', 'href','#icon-link');
-    anchorIcon.appendChild(anchorUse);
-    anchor.appendChild(anchorIcon);
-    activityLink.appendChild(anchor);
+    activityLink = buildActivityLink(aObj.link, activityLink);
   }
-
   row.appendChild(activity);
   row.appendChild(activityLink);
   row.appendChild(startDate);
@@ -106,34 +99,34 @@ function appendActivity(aObj, tbl, hasEndDate){
   if(aObj['details']){
     addDetails(row, aObj.details, 'activity-detail');
   }
-
   //region Admin Only
   let btnColumn = document.createElement('td');
   addActivityEditing(aObj.idx, btnColumn);
-  //region Time Log Logic
-  let btnTimeLog = document.createElement('button');
-  btnTimeLog.textContent = 'TimeLog';
-  btnTimeLog.setAttribute('data-index', aObj.idx);
-  btnTimeLog.addEventListener('click', function(e){
-    //If no log table present display it, if it is present remove it and if a different instance of the button was pressed display the table for its respective row.
-    let prevSpn = document.getElementById('tblhere');
-    let sameInstanceOfButtonClicked = false;
-    if(prevSpn){
-      sameInstanceOfButtonClicked = e.target.parentElement == prevSpn.parentElement;
-      prevSpn.parentElement.removeChild(prevSpn);
-    }
-    if(!(sameInstanceOfButtonClicked)){
-      let tlDiv = document.createElement('div');
-      tlDiv.id = 'tblhere';
-      tlDiv.value = e.target.value;
-      tlDiv.className='tblTimeLogContainer';
-      tlDiv.setAttribute('data-index', e.target.dataset.index);
-      e.target.parentElement.parentElement.appendChild(tlDiv);
-      //calling a view and its associated script within another mySkills made gobal in index.
-      mySkills.route('timeLogTable', 'tblhere');
-    }
-  });
-  //btnColumn.appendChild(btnTimeLog);
+  buildTimeLogBtn(aObj.idx, btnColumn);
+  // //region Time Log Logic
+  // let btnTimeLog = document.createElement('button');
+  // btnTimeLog.textContent = 'TimeLog';
+  // btnTimeLog.setAttribute('data-index', aObj.idx);
+  // btnTimeLog.addEventListener('click', function(e){
+  //   //If no log table present display it, if it is present remove it and if a different instance of the button was pressed display the table for its respective row.
+  //   let prevSpn = document.getElementById('tblhere');
+  //   let sameInstanceOfButtonClicked = false;
+  //   if(prevSpn){
+  //     sameInstanceOfButtonClicked = e.target.parentElement == prevSpn.parentElement;
+  //     prevSpn.parentElement.removeChild(prevSpn);
+  //   }
+  //   if(!(sameInstanceOfButtonClicked)){
+  //     let tlDiv = document.createElement('div');
+  //     tlDiv.id = 'tblhere';
+  //     tlDiv.value = e.target.value;
+  //     tlDiv.className='tblTimeLogContainer';
+  //     tlDiv.setAttribute('data-index', e.target.dataset.index);
+  //     e.target.parentElement.parentElement.appendChild(tlDiv);
+  //     //calling a view and its associated script within another mySkills made gobal in index.
+  //     mySkills.route('timeLogTable', 'tblhere');
+  //   }
+  // });
+
   //endregion
   row.appendChild(btnColumn);
   row.id = aObj.idx;
@@ -145,6 +138,51 @@ function appendActivity(aObj, tbl, hasEndDate){
   //endregion
 
   tbl.appendChild(row);
+}
+/**
+ * function buildTimeLogBtn
+ * Creates a button for loading timeLog component
+ * Depends on alot
+ * @param dataIdx
+ * @param elIn
+ */
+function buildTimeLogBtn(dataIdx, elIn){
+  let btnTimeLog = document.createElement('button');
+  btnTimeLog.textContent = 'TimeLog';
+  btnTimeLog.setAttribute('data-index', dataIdx);
+  btnTimeLog.addEventListener('click', btnTimeLogEventHandler);
+  elIn.appendChild(btnTimeLog);
+}
+/**
+ * @function buildActivityLink
+ * Creates activity link cell
+ * Depends on function buildIcon and svg '#icon-link'.
+ * @param data
+ * @param td
+ * @returns {*}
+ */
+function buildActivityLink(data, td){
+  var anchor = document.createElement('a');
+  anchor.href = data;
+  let anchorIcon = buildIcon('#icon-link');
+  anchor.appendChild(anchorIcon);
+  td.appendChild(anchor);
+  return td;
+}
+/**
+ * function buildIcon
+ * Creates an icon using svg
+ * Depends on 'icon' class
+ * @param svgLink
+ * @returns {*}
+ */
+function buildIcon(svgLink){
+  let icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  let iconUse = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+  icon.setAttribute('class', 'icon');
+  iconUse.setAttributeNS('http://www.w3.org/1999/xlink', 'href', svgLink);
+  icon.appendChild(iconUse);
+  return icon;
 }
 /**
  * @function buildActivityTables
@@ -271,4 +309,23 @@ function btnEditEventHandler(e) {
   let row = document.getElementById(rowAndDataId);
   mySkills.route('activityEdit', 'activity-edit');
   tableInsertView(view, row);
+}
+function btnTimeLogEventHandler(e){
+  //If no log table present display it, if it is present remove it and if a different instance of the button was pressed display the table for its respective row.
+  let prevSpn = document.getElementById('tblhere');
+  let sameInstanceOfButtonClicked = false;
+  if(prevSpn){
+    sameInstanceOfButtonClicked = e.target.parentElement == prevSpn.parentElement;
+    prevSpn.parentElement.removeChild(prevSpn);
+  }
+  if(!(sameInstanceOfButtonClicked)){
+    let tlDiv = document.createElement('div');
+    tlDiv.id = 'tblhere';
+    tlDiv.value = e.target.value;
+    tlDiv.className='tblTimeLogContainer';
+    tlDiv.setAttribute('data-index', e.target.dataset.index);
+    e.target.parentElement.parentElement.appendChild(tlDiv);
+    //calling a view and its associated script within another mySkills made gobal in index.
+    mySkills.route('timeLogTable', 'tblhere');
+  }
 }
