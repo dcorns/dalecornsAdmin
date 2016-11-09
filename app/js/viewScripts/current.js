@@ -58,6 +58,7 @@ function updateView(){
   let typeIdx = window.sessionStorage.getItem('typeIndex') || '0';
   var tblActivity = document.getElementById('tbl-activity');
   var tblComplete = document.getElementById('tbl-complete');
+  hideAllTableInserts(['activity-edit', 'activity-detail', 'time-log-table']);
   mySkills.clientRoutes.getData('current?typeIndex=' + typeIdx, function(err, data){
     if(err){
       alert('No current data stored locally. Internet connection required');
@@ -102,7 +103,7 @@ function appendActivity(aObj, tbl, hasEndDate){
   //region Admin Only
   let btnColumn = document.createElement('td');
   addActivityEditing(aObj.idx, btnColumn);
-  buildTimeLogBtn(aObj.idx, btnColumn);
+  addTimeLogBtn(aObj.idx, btnColumn);
   // //region Time Log Logic
   // let btnTimeLog = document.createElement('button');
   // btnTimeLog.textContent = 'TimeLog';
@@ -140,16 +141,16 @@ function appendActivity(aObj, tbl, hasEndDate){
   tbl.appendChild(row);
 }
 /**
- * function buildTimeLogBtn
+ * function addTimeLogBtn
  * Creates a button for loading timeLog component
  * Depends on alot
  * @param dataIdx
  * @param elIn
  */
-function buildTimeLogBtn(dataIdx, elIn){
+function addTimeLogBtn(dataIdx, elIn){
   let btnTimeLog = document.createElement('button');
   btnTimeLog.textContent = 'TimeLog';
-  btnTimeLog.setAttribute('data-index', dataIdx);
+  btnTimeLog.setAttribute('data-dataid', dataIdx);
   btnTimeLog.addEventListener('click', btnTimeLogEventHandler);
   elIn.appendChild(btnTimeLog);
 }
@@ -254,14 +255,18 @@ function buildMenu(data, menuElement){
   data.forEach(function(item){
     let btn = document.createElement('button');
     btn.textContent = item;
-    btn.value = menuIndex;
-    btn.addEventListener('click', function(){
-      window.sessionStorage.setItem('typeIndex', this.value);
-      updateView();
-    });
+    btn.setAttribute('data-menuIndex', menuIndex);
+    btn.addEventListener('click', btnMenuEventHandler);
     menuElement.appendChild(btn);
     menuIndex++;
   });
+}
+/**
+ * @function btnMenuEventHandler
+ */
+function btnMenuEventHandler(){
+  window.sessionStorage.setItem('typeIndex', this.dataset.menuindex);
+  updateView();
 }
 /**
  * @function splitAndIndexData
@@ -310,22 +315,28 @@ function btnEditEventHandler(e) {
   mySkills.route('activityEdit', 'activity-edit');
   tableInsertView(view, row);
 }
+/**
+ * @function btnTimeLogEventHandler
+ * @param e
+ */
 function btnTimeLogEventHandler(e){
-  //If no log table present display it, if it is present remove it and if a different instance of the button was pressed display the table for its respective row.
-  let prevSpn = document.getElementById('tblhere');
-  let sameInstanceOfButtonClicked = false;
-  if(prevSpn){
-    sameInstanceOfButtonClicked = e.target.parentElement == prevSpn.parentElement;
-    prevSpn.parentElement.removeChild(prevSpn);
-  }
-  if(!(sameInstanceOfButtonClicked)){
-    let tlDiv = document.createElement('div');
-    tlDiv.id = 'tblhere';
-    tlDiv.value = e.target.value;
-    tlDiv.className='tblTimeLogContainer';
-    tlDiv.setAttribute('data-index', e.target.dataset.index);
-    e.target.parentElement.parentElement.appendChild(tlDiv);
-    //calling a view and its associated script within another mySkills made gobal in index.
-    mySkills.route('timeLogTable', 'tblhere');
+  let view = document.getElementById('time-log-table');
+  let rowAndDataId = e.target.dataset.dataid;
+  view.setAttribute('data-dataid', rowAndDataId);
+  let row = document.getElementById(rowAndDataId);
+  mySkills.route('timeLogTable', 'time-log-table');
+  tableInsertView(view, row);
+}
+/**
+ * @function hideAllTableInserts
+ * @param ary
+ */
+function hideAllTableInserts(ary){
+  let i = 0, ln = ary.length;
+  for(i; i < ln; i++){
+    let tblInsert = document.getElementById(ary[i]);
+    if(!(tblInsert.classList.contains('hide'))) {
+      tblInsert.classList.toggle('hide');
+    }
   }
 }

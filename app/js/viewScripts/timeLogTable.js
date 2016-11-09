@@ -18,10 +18,10 @@ module.exports = function timeLogTable() {
   let btnAddNewTimeLog = document.getElementById('btnAddNewTimeLog');
   let btnSaveNewTimeLog = document.getElementById('btnSaveNewTimeLog');
   let tblTimeLog = document.getElementById('tblTimeLog');
-  let dataIndex = tblTimeLog.parentElement.parentElement.parentElement.dataset.index;
+  let self = document.getElementById('timeLogTable');
+  let dataIndex = self.parentElement.dataset.dataid;
   timeLogTableData.rowData = JSON.parse(window.localStorage.getItem('current')).json[dataIndex].timeLogs;
-  loadTimeLogData(tblTimeLog, timeLogTableData.rowData);
-  //Get current activities from local.storage
+  if(timeLogTableData.rowData) loadTimeLogData(tblTimeLog, timeLogTableData.rowData);
   //Event listeners***********************************************
 btnAddNewTimeLog.addEventListener('click', function(e){
   btnAddNewTimeLog.className = 'hide';
