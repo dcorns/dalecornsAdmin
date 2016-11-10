@@ -40,6 +40,7 @@ module.exports = {
     });
   },
   saveTimeLog: function saveTimeLog(data, cb){
+    console.dir(data);
     cg.dbDocFind({_id: data.id}, 'currentActivities', function(err, docData){
       if(err) {
         console.dir(err);

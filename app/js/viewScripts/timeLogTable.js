@@ -21,11 +21,12 @@ module.exports = function timeLogTable() {
   let self = document.getElementById('timeLogTable');
   let dataIndex = self.parentElement.dataset.dataid;
   timeLogTableData.rowData = JSON.parse(window.localStorage.getItem('current')).json[dataIndex].timeLogs;
+  timeLogTableData.id = JSON.parse(window.localStorage.getItem('current')).json[dataIndex]._id;
   if(timeLogTableData.rowData) loadTimeLogData(tblTimeLog, timeLogTableData.rowData);
-  //Event listeners***********************************************
+  //Event listeners**************************************************
 btnAddNewTimeLog.addEventListener('click', function(e){
   btnAddNewTimeLog.className = 'hide';
-  timeLogTableData.id = e.target.parentElement.parentElement.value;
+  //timeLogTableData.id = e.target.parentElement.parentElement.dataset.dataid;
   //populate module variable timeLogTblEditRow with input fields
   createEditRow();
   tblTimeLog.appendChild(timeLogTableEditView.editRow);
@@ -34,6 +35,7 @@ btnAddNewTimeLog.addEventListener('click', function(e){
     timeLogTableData.timeLogEditData.timeIn = timeLogTableEditView.timeIn.value;
     timeLogTableData.timeLogEditData.workPerformed = timeLogTableEditView.workPerformed.value;
     timeLogTableData.timeLogEditData.timeOut = timeLogTableEditView.timeOut.value;
+    console.dir(timeLogTableData);
     clientRoutes.saveData('saveTimeLog', timeLogTableData, function (err, data) {
       if(err){
         alert('Error saving data!');
@@ -41,7 +43,7 @@ btnAddNewTimeLog.addEventListener('click', function(e){
       }
       alert('Time log entry Saved!');
     });
-  });
+   });
 };
 
 function createEditRow(rowIn){
