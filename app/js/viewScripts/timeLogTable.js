@@ -7,13 +7,10 @@
 let timeLogTableData = {};
 timeLogTableData.timeLogEditData = {};
 let timeLogTableEditView = {};
-timeLogTableEditView.editRow = document.createElement('tr');
-timeLogTableEditView.btnSave = document.createElement('button');
-// timeLogTableEditView.timeIn.setAttribute('type', 'datetime-local');
-// timeLogTableEditView.workPerformed.setAttribute('type', 'text');
-// timeLogTableEditView.timeOut.setAttribute('type', 'datetime-local');
-timeLogTableEditView.btnSave.innerHTML = 'SAVE';
-
+/**
+ * @module timeLogTable
+ * Companion to timeLogTable.html
+ */
 module.exports = function timeLogTable() {
   let tblTimeLogBody = document.getElementById('tblTimeLogBody');
   timeLogTableEditView.timeIn = document.getElementById('timeLogTimeIn');
@@ -27,8 +24,10 @@ module.exports = function timeLogTable() {
   timeLogTableEditView.btnSaveNew = document.getElementById('timLogBtnSaveNew');
   //Event listeners**************************************************
   timeLogTableEditView.btnSaveNew.addEventListener('click', saveTimeLogItem);
-  timeLogTableEditView.btnSave.addEventListener('click', saveTimeLogItem);
 };
+/**
+ * @function saveTimeLogItem
+ */
 function saveTimeLogItem(){
   timeLogTableData.timeLogEditData.timeIn = timeLogTableEditView.timeIn.value;
   timeLogTableData.timeLogEditData.workPerformed = timeLogTableEditView.workPerformed.value;
@@ -38,29 +37,25 @@ function saveTimeLogItem(){
       alert('Error saving data!');
       return;
     }
-    alert('Time log entry Saved!');
+    if(timeLogTableData.rowData){
+      timeLogTableData.rowData.push(timeLogTableData.timeLogEditData);
+    }
+    else{
+      timeLogTableData.rowData = [timeLogTableData.timeLogEditData];
+    }
+    timeLogTableEditView.timeIn.value = '';
+    timeLogTableEditView.workPerformed.value = '';
+    timeLogTableEditView.timeOut.value = '';
+    loadTimeLogData(document.getElementById('tblTimeLogBody'), timeLogTableData.rowData);
   });
 }
-function createEditRow(rowIn){
-  timeLogTableEditView.timeIn.value = '';
-  timeLogTableEditView.workPerformed.value = '';
-  timeLogTableEditView.timeOut.value = '';
-    timeLogTableEditView.editRow.innerHTML = '';
-    let tdNewTimeInField = document.createElement('td');
-    let tdWorkPerformedField = document.createElement('td');
-    let tdNewTimeOutField = document.createElement('td');
-    let tdbtnField = document.createElement('td');
-    tdNewTimeInField.appendChild(timeLogTableEditView.timeIn);
-    tdWorkPerformedField.appendChild(timeLogTableEditView.workPerformed);
-    tdNewTimeOutField.appendChild(timeLogTableEditView.timeOut);
-    tdbtnField.appendChild(timeLogTableEditView.btnSave);
-    timeLogTableEditView.editRow.appendChild(tdNewTimeInField);
-    timeLogTableEditView.editRow.appendChild(tdWorkPerformedField);
-    timeLogTableEditView.editRow.appendChild(tdNewTimeOutField);
-    timeLogTableEditView.editRow.appendChild(tdbtnField);
-}
-
+/**
+ * @function loadTimeLogData
+ * @param tbl
+ * @param data
+ */
 function loadTimeLogData(tbl, data){
+  tbl.innerHTML = '';
   let i = 0, ln = data.length;
   for(i; i < ln; i++){
     let row = document.createElement('tr');
