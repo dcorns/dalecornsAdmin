@@ -49,7 +49,6 @@
     display: inline-block;
     width:100%;
 }
-#current #timeLogTable{
-    border: solid 2px darkblue;
-    background-color: #ddf1ff;
+#current #time-log-table{
+    border: solid 4px black;
 }

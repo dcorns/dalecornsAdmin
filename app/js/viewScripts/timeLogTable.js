@@ -4,7 +4,6 @@
  * Copyright © 2016 Dale Corns
  */
 'use strict';
-let clientRoutes = require('../clientRoutes')();
 let timeLogTableData = {};
 timeLogTableData.timeLogEditData = {};
 let timeLogTableEditView = {};
@@ -17,26 +16,24 @@ timeLogTableEditView.btnSave = document.createElement('button');
 module.exports = function timeLogTable() {
   let btnAddNewTimeLog = document.getElementById('btnAddNewTimeLog');
   let btnSaveNewTimeLog = document.getElementById('btnSaveNewTimeLog');
-  let tblTimeLog = document.getElementById('tblTimeLog');
+  let tblTimeLogBody = document.getElementById('tblTimeLogBody');
   let self = document.getElementById('timeLogTable');
   let dataIndex = self.parentElement.dataset.dataid;
   timeLogTableData.rowData = JSON.parse(window.localStorage.getItem('current')).json[dataIndex].timeLogs;
   timeLogTableData.id = JSON.parse(window.localStorage.getItem('current')).json[dataIndex]._id;
-  if(timeLogTableData.rowData) loadTimeLogData(tblTimeLog, timeLogTableData.rowData);
+  if(timeLogTableData.rowData) loadTimeLogData(tblTimeLogBody, timeLogTableData.rowData);
   //Event listeners**************************************************
-btnAddNewTimeLog.addEventListener('click', function(e){
+  btnAddNewTimeLog.addEventListener('click', function(e){
   btnAddNewTimeLog.className = 'hide';
-  //timeLogTableData.id = e.target.parentElement.parentElement.dataset.dataid;
-  //populate module variable timeLogTblEditRow with input fields
   createEditRow();
-  tblTimeLog.appendChild(timeLogTableEditView.editRow);
+  tblTimeLogBody.appendChild(timeLogTableEditView.editRow);
 });
   timeLogTableEditView.btnSave.addEventListener('click', function(){
     timeLogTableData.timeLogEditData.timeIn = timeLogTableEditView.timeIn.value;
     timeLogTableData.timeLogEditData.workPerformed = timeLogTableEditView.workPerformed.value;
     timeLogTableData.timeLogEditData.timeOut = timeLogTableEditView.timeOut.value;
     console.dir(timeLogTableData);
-    clientRoutes.saveData('saveTimeLog', timeLogTableData, function (err, data) {
+    mySkills.clientRoutes.saveData('saveTimeLog', timeLogTableData, function (err, data) {
       if(err){
         alert('Error saving data!');
         return;
@@ -51,6 +48,7 @@ function createEditRow(rowIn){
 
   }
   else{
+    timeLogTableEditView.editRow.innerHTML = '';
     timeLogTableEditView.timeIn.setAttribute('type', 'datetime-local');
     timeLogTableEditView.workPerformed.setAttribute('type', 'text');
     timeLogTableEditView.timeOut.setAttribute('type', 'datetime-local');
