@@ -104,31 +104,6 @@ function appendActivity(aObj, tbl, hasEndDate){
   let btnColumn = document.createElement('td');
   addActivityEditing(aObj.idx, btnColumn);
   addTimeLogBtn(aObj.idx, btnColumn);
-  // //region Time Log Logic
-  // let btnTimeLog = document.createElement('button');
-  // btnTimeLog.textContent = 'TimeLog';
-  // btnTimeLog.setAttribute('data-index', aObj.idx);
-  // btnTimeLog.addEventListener('click', function(e){
-  //   //If no log table present display it, if it is present remove it and if a different instance of the button was pressed display the table for its respective row.
-  //   let prevSpn = document.getElementById('tblhere');
-  //   let sameInstanceOfButtonClicked = false;
-  //   if(prevSpn){
-  //     sameInstanceOfButtonClicked = e.target.parentElement == prevSpn.parentElement;
-  //     prevSpn.parentElement.removeChild(prevSpn);
-  //   }
-  //   if(!(sameInstanceOfButtonClicked)){
-  //     let tlDiv = document.createElement('div');
-  //     tlDiv.id = 'tblhere';
-  //     tlDiv.value = e.target.value;
-  //     tlDiv.className='tblTimeLogContainer';
-  //     tlDiv.setAttribute('data-index', e.target.dataset.index);
-  //     e.target.parentElement.parentElement.appendChild(tlDiv);
-  //     //calling a view and its associated script within another mySkills made gobal in index.
-  //     mySkills.route('timeLogTable', 'tblhere');
-  //   }
-  // });
-
-  //endregion
   row.appendChild(btnColumn);
   row.id = aObj.idx;
   row.setAttribute('data-startdate', aObj.startDate);
@@ -186,9 +161,9 @@ function buildIcon(svgLink){
   return icon;
 }
 /**
- * @function buildActivityTables
+ * @function buildActivityTable
  * Builds the completed and incomplete activity tables
- * Depends on the splitAndIndexData and appendActivity table
+ * Depends on the splitAndIndexData and appendActivity functions
  * @param data
  * @param tblNow
  * @param tblOld

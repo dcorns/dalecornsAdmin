@@ -33,6 +33,11 @@ module.exports = function(app){
       });
     }
   });
+  // app.get('/timeLogData', function(req, res){
+  //   if(req.query.hasOwnProperty('id')){
+  //     dataScript.getTimeLogData();
+  //   }
+  // });
   app.post('/saveActivity', function(req, res, next){
     dataScript.saveActivity(req.body, function(err, data){
       if(err) {
