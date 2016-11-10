@@ -1,5 +1,10 @@
 <section id="timeLogTable">
-    <span>TotalTime</span>
+    <form>
+        <input id="timeLogTimeIn" type="datetime-local">
+        <input id="timeLogTimeOut" type="datetime-local">
+        <button id="timLogBtnSaveNew" type="button">SAVE NEW</button>
+        <input id="timeLogWorkPerformed" type="text" placeholder="Work Performed">
+    </form>
     <table id="tblTimeLog">
         <thead>
             <tr>
@@ -8,5 +13,4 @@
         </thead>
         <tbody id="tblTimeLogBody"></tbody>
     </table>
-    <button id="btnAddNewTimeLog">NewEntry</button>
 </section>

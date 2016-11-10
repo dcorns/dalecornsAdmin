@@ -21,3 +21,11 @@
 #timeLogTable table td:nth-child(3){
     background-color: seagreen;
 }
+#timeLogTable input[type='datetime-local']{
+    background-color: #3d4966;
+    width: 40%;
+}
+#timeLogTable input[type='text']{
+    background-color: #3d4966;
+    width: 100%;
+}
