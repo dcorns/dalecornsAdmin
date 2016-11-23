@@ -16,6 +16,11 @@ let corngoose = require ("corngoose");
 let app = express();
 let server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 let server_port = process.env.HTTP_PORT || 3000;
+let remoteDataBase = process.env.REMOTE_DATABASE || '127.0.0.1';
+let remoteDataBasePort = process.env.REMOTE_DATABASE_PORT || 270175;
+let remoteDataBaseTimeout = process.env.REMOTE_DATABASE_TIMEOUT || 1;
+let databasePath = remoteDataBase + ':' + remoteDataBasePort;
+console.log(databasePath);
 let server;
 let path = require('path');
 //Serve static assets from public
@@ -35,7 +40,7 @@ app.get('/', function (req, res) {
 require('./api/routes')(app);
 
 //if db server had to be started by host, this gives it some time before trying to connect
-setTimeout(function(){corngoose.startDB('drc');}, 15000);
+setTimeout(function(){corngoose.startDB('drc', databasePath);}, remoteDataBaseTimeout);
 
 
 server = app.listen(server_port, server_ip_address, function(){
