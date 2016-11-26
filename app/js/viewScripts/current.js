@@ -283,6 +283,7 @@ function btnEditEventHandler(e) {
   if(window.localStorage.getItem('updateId') === 'updated'){
     updateView();
   }
+  //dataid is the array index of the data object in local storage current
   let rowAndDataId = e.target.dataset.dataid;
   let view = document.getElementById('activity-edit');
   view.setAttribute('data-dataid', rowAndDataId);

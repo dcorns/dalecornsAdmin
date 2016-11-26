@@ -1,29 +1,33 @@
 #timeLogTable {
-    background-color: #3d4966;
+    background-color: seagreen;
     color: black;
 }
 #timeLogTable table{
     display: block;
     width: 100%;
+    font-size: 1.4vw;
 }
 #timeLogTable table th{
     width:33%;
+    text-align: center;
 }
-#timeLogTable table td:nth-child(1){
+#timeLogTable table td{
     background-color: seagreen;
+    height: 1vw;
 }
 #timeLogTable table td:nth-child(2){
     background-color: seagreen;
+    text-align: center;
 }
 #timeLogTable table td:nth-child(2):hover{
     background-color: seagreen;
 }
 #timeLogTable table td:nth-child(3){
     background-color: seagreen;
+    text-align: right;
 }
 #timeLogTable input[type='datetime-local']{
     background-color: #3d4966;
-    width: 40%;
 }
 #timeLogTable input[type='text']{
     background-color: #3d4966;
