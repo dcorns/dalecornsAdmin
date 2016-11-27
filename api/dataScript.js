@@ -47,7 +47,8 @@ module.exports = {
         cb(err, null);
       }
       if(docData[0].timeLogs){
-        docData[0].timeLogs.push(data.timeLogEditData);
+        if(data.editRowIndex > -1) docData[0].timeLogs[data.editRowIndex] = data.timeLogEditData;
+        else docData[0].timeLogs.push(data.timeLogEditData);
       }
       else{
         docData[0].timeLogs = [data.timeLogEditData];

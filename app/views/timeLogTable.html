@@ -1,10 +1,4 @@
 <section id="timeLogTable">
-    <form id="frmTimeLogEdit" class="hide">
-        <input id="timeLogTimeIn" type="datetime-local">
-        <input id="timeLogTimeOut" type="datetime-local">
-        <button id="timLogBtnSaveNew" type="button">SAVE</button>
-        <input id="timeLogWorkPerformed" type="text" placeholder="Work Performed">
-    </form>
     <button id="btnAddTimeLog" type="button">ADD NEW LOG</button>
     <table id="tblTimeLog">
         <thead>
@@ -13,9 +7,9 @@
             </tr>
         </thead>
         <tr id="trTimeLogEdit" class="hide">
-            <td><input type="datetime-local"></td>
-            <td><input type="text"></td>
-            <td><input type="datetime-local"></td>
+            <td><input id="timeLogTimeIn" type="datetime-local"></td>
+            <td><input id="timeLogWorkPerformed" placeholder="Work Performed" type="text"></td>
+            <td><input id="timeLogTimeOut" type="datetime-local"></td>
             <td><button id="btnTimeLogEditSave">SAVE</button>
                 <button id="btnTimeLogEditCancel" type="button">CANCEL</button></td>
         </tr>
