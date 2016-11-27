@@ -36,13 +36,14 @@ gulp.task('copyassets', function(){
     .pipe(gulp.dest('Development'));
 });
 gulp.task('dev-server', function(){
-  const cp = childProcess('node', ['host', '/Development']);
+  const cp = childProcess('node', ['server', '/Development']);
   cp.stdout.on('data', function(data){
     console.log(data.toString('utf8'));
   });
 });
 
 gulp.task('server', function(){
+  process.env.USE_REMOTE_DATABASE = 1;
   const cp = childProcess('node', ['server', '/Development']);
   cp.stdout.on('data', function(data){
     console.log(data.toString('utf8'));
@@ -50,6 +51,7 @@ gulp.task('server', function(){
 });
 
 gulp.task('adminMock', function(){
+  process.env.USE_REMOTE_DATABASE = 0;
   const cpdb = childProcess('mongod');
   cpdb.stdout.on('data', function(data){
     console.log(data.toString('utf8'));
@@ -57,15 +59,15 @@ gulp.task('adminMock', function(){
 });
 
 gulp.task('admin', function(){
-  const cpdb = childProcess('rhc', ['port-forward', '-a', 'dalecorns']);
-  cpdb.stdout.on('data', function(data){
-    console.log(data.toString('utf8'));
-  });
+  // const cpdb = childProcess('rhc', ['port-forward', '-a', 'dalecorns']);
+  // cpdb.stdout.on('data', function(data){
+  //   console.log(data.toString('utf8'));
+  // });
 });
 
 gulp.task('adminData', ['admin', 'server']);
 
-gulp.task('mockData', ['adminMock', 'server']);
+gulp.task('mockData', ['adminMock', 'dev-server']);
 
 gulp.task('build-css', function(){
   return gulp.src('app/styles/**/*')

@@ -20,7 +20,10 @@ let remoteDataBase = process.env.REMOTE_DATABASE || '127.0.0.1';
 let remoteDataBasePort = process.env.REMOTE_DATABASE_PORT || 270175;
 let remoteDataBaseTimeout = process.env.REMOTE_DATABASE_TIMEOUT || 1;
 let databasePath;
-if(process.env.USE_REMOTE_DATA == 1) databasePath = remoteDataBase + ':' + remoteDataBasePort;
+console.log('USE_REMOTE_DATABASE', process.env.USE_REMOTE_DATABASE);
+if(process.env.USE_REMOTE_DATABASE == 1){
+databasePath = remoteDataBase + ':' + remoteDataBasePort;
+}
 else databasePath = 'localhost';
 let server;
 let path = require('path');
