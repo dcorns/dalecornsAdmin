@@ -7,6 +7,7 @@
 'use strict';
 //var clientRoutes = require('../clientRoutes')();
 module.exports = function current(){
+  document.addEventListener('dataSaved', updateView, false); //event triggered by activityEdit.js after saving so update view can be called
   let btnActivityMenu = document.getElementById('btn-activity-menu');
   let activityMenu = document.getElementById('menu-activities-category');
   btnActivityMenu.addEventListener('click', function(){
@@ -39,9 +40,10 @@ module.exports = function current(){
         alert('Error saving data!');
         return;
       }
-      alert('Activity Saved!');
       window.localStorage.setItem('updateId', 'newSaved');
       updateView();
+      frmActivity.classList.toggle('hide');
+      frmBtnSave.classList.toggle('hide');
     })
   });
   //endregion

@@ -17,8 +17,6 @@ module.exports = function activityEdit(){
   frm[3].value = data.link;
   frm[4].value = data.details;
   btnSave.addEventListener('click', function(){
-    console.log('save Edits');
-    console.log('updateId', window.localStorage.getItem('updateId'));
     let data = {
       id: window.localStorage.getItem('updateId'),
       updates: {
@@ -35,8 +33,12 @@ module.exports = function activityEdit(){
         alert('Error saving data!');
         return;
       }
-      alert('Activity Saved!');
       window.localStorage.setItem('updateId', 'updated');
+      self.classList.toggle('hide');
+      //Trigger custom event created in current.js to cause view update
+      let evt =document.createEvent('Events');
+      evt.initEvent('dataSaved', true, false);
+      self.dispatchEvent(evt);
     })
   });
 };
