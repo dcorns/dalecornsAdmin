@@ -5,7 +5,7 @@
  * Depends on global mySkills
  */
 'use strict';
-//var clientRoutes = require('../clientRoutes')();
+
 module.exports = function current(){
   document.addEventListener('dataSaved', updateView, false); //event triggered by activityEdit.js after saving so update view can be called
   let btnActivityMenu = document.getElementById('btn-activity-menu');
