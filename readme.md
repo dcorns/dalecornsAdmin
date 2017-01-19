@@ -9,9 +9,7 @@ Running `gulp watcher` will insure that all the css is converted from 4 to 3 and
 ######mockData
 run this for testing local data in development
 ######adminData
-run this to use the tool for managing the mongodb data on openShift.
+run this to use the tool for managing the mongodb data on EC2.
 ####Development Flow AWS
 ######gulp mockData
 run this for testing local data in development
-######gulp server
-run this to use the tool on remote EC2 host
