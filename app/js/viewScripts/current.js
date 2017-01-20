@@ -6,55 +6,118 @@
  */
 'use strict';
 module.exports = function current(){
+  //set/read state
   if (!(parseInt(window.sessionStorage.getItem('typeIndex'), 10))) window.sessionStorage.setItem('typeIndex', '0');
-  document.addEventListener('dataSaved', updateView, false); //event triggered by activityEdit.js after saving so update view can be called
-
-  let btnActivityMenu = getElementById('btn-activity-menu');
-  let activityMenu = getElementById('menu-activities-category');
-  let btnAddNew = getElementById('btnAddNew');
-  let frmActivity = getElementById('frmActivity');
-  let frmBtnSave = getElementById('frmBtnSave');
-  btnActivityMenu.addEventListener('click', function(){
-    activityMenu.classList.toggle('hide');
-  });
-  btnAddNew.addEventListener('click', function(){
-    frmActivity.classList.toggle('hide');
-    frmBtnSave.classList.toggle('hide');
-  });
-  frmBtnSave.addEventListener('click', function(){
-    let data = {
-      id: 0,
-      updates: {
-        startDate: document.getElementById('frmStartDate').value,
-        activity: document.getElementById('frmActivityLine').value,
-        link: document.getElementById('frmLink').value,
-        details: document.getElementById('frmDetail').value,
-        type: window.sessionStorage.getItem('typeIndex') || '0',
-        endDate: document.getElementById('frmEndDate').value
-      }
-    };
-    mySkills.clientRoutes.saveData('saveActivity', data, function (err, data) {
-      if(err){
-        alert('Error saving data!');
-        return;
-      }
-      window.localStorage.setItem('updateId', 'newSaved');
-      updateView();
-      frmActivity.classList.toggle('hide');
-      frmBtnSave.classList.toggle('hide');
-    })
-  });
+  //load data
   mySkills.clientRoutes.getData('currentCategoryMenu', function(err, data){
     if(err){
       console.error(err);
       return;
     }
-    buildMenu(data.json[0].activityCategories, activityMenu);
+    buildMenu(data.json[0].activityCategories, menus.activityMenu.el);
   });
+
+  document.addEventListener('dataSaved', updateView, false); //event triggered by activityEdit.js after saving so update view can be called
+  let btns, menus, frms;
+  [menus, btns, frms] = configureElements();
+  addBtnClickListeners(btns);
+  // btns.activityMenu.el.addEventListener('click', function(){
+  //   menus.activityMenu.el.classList.toggle('hide');
+  // });
+  // btns.addNew.el.addEventListener('click', function(){
+  //   frms.activity.el.classList.toggle('hide');
+  //   btns.formSave.el.classList.toggle('hide');
+  // });
+  // btns.formSave.el.addEventListener('click', function(){
+  //   let data = {
+  //     id: 0,
+  //     updates: {
+  //       startDate: document.getElementById('frmStartDate').value,
+  //       activity: document.getElementById('frmActivityLine').value,
+  //       link: document.getElementById('frmLink').value,
+  //       details: document.getElementById('frmDetail').value,
+  //       type: window.sessionStorage.getItem('typeIndex') || '0',
+  //       endDate: document.getElementById('frmEndDate').value
+  //     }
+  //   };
+  //   mySkills.clientRoutes.saveData('saveActivity', data, function (err, data) {
+  //     if(err){
+  //       alert('Error saving data!');
+  //       return;
+  //     }
+  //     window.localStorage.setItem('updateId', 'newSaved');
+  //     updateView();
+  //     frms.activity.el.classList.toggle('hide');
+  //     btns.formSave.el.classList.toggle('hide');
+  //   })
+  // });
   updateView();
 };
+//loads DOM form, button, and menu elements into the objects menus, btns, frms
+function configureElements(){
+  let menus = {
+    activityMenu: {
+      el: getElementById('menu-activities-category')
+    }
+  };
+  let btns = {
+    activityMenu: {
+      el: getElementById('btn-activity-menu'),
+      click: function(){
+        menus.activityMenu.el.classList.toggle('hide');
+      }
+    },
+    addNew: {
+      el: getElementById('btnAddNew'),
+      click: function(){
+        frms.activity.el.classList.toggle('hide');
+        btns.formSave.el.classList.toggle('hide');
+      }
+    },
+    formSave: {
+      el: getElementById('frmBtnSave'),
+      click: function(){
+        let data = {
+          id: 0,
+          updates: {
+            startDate: document.getElementById('frmStartDate').value,
+            activity: document.getElementById('frmActivityLine').value,
+            link: document.getElementById('frmLink').value,
+            details: document.getElementById('frmDetail').value,
+            type: window.sessionStorage.getItem('typeIndex') || '0',
+            endDate: document.getElementById('frmEndDate').value
+          }
+        };
+        mySkills.clientRoutes.saveData('saveActivity', data, function (err, data) {
+          if(err){
+            alert('Error saving data!');
+            return;
+          }
+          window.localStorage.setItem('updateId', 'newSaved');
+          updateView();
+          frms.activity.el.classList.toggle('hide');
+          btns.formSave.el.classList.toggle('hide');
+        })
+      }
+    }
+  };
+  let frms = {
+    activity: {
+      el: getElementById('frmActivity')
+    }
+  };
+  return [menus, btns, frms];
+}
+//add event listener to element
 function getElementById(elId){
   return document.getElementById(elId);
+}
+//use click property of object to create listener for el property
+function addBtnClickListeners(obj){
+  let ary = Object.keys(obj), l = ary.length, i = 0;
+  for(i; i < l; i++){
+    obj[ary[i]].el.addEventListener('click', obj[ary[i]].click);
+  }
 }
 function updateView(){
   let typeIdx = window.sessionStorage.getItem('typeIndex') || '0';
