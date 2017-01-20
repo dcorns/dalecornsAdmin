@@ -6,17 +6,17 @@
  */
 'use strict';
 module.exports = function current(){
+  if (!(parseInt(window.sessionStorage.getItem('typeIndex'), 10))) window.sessionStorage.setItem('typeIndex', '0');
   document.addEventListener('dataSaved', updateView, false); //event triggered by activityEdit.js after saving so update view can be called
-  let btnActivityMenu = document.getElementById('btn-activity-menu');
-  let activityMenu = document.getElementById('menu-activities-category');
+
+  let btnActivityMenu = getElementById('btn-activity-menu');
+  let activityMenu = getElementById('menu-activities-category');
+  let btnAddNew = getElementById('btnAddNew');
+  let frmActivity = getElementById('frmActivity');
+  let frmBtnSave = getElementById('frmBtnSave');
   btnActivityMenu.addEventListener('click', function(){
     activityMenu.classList.toggle('hide');
   });
-  if (!(parseInt(window.sessionStorage.getItem('typeIndex'), 10))) window.sessionStorage.setItem('typeIndex', '0');
-  //region Admin Only
-  let btnAddNew = document.getElementById('btnAddNew');
-  let frmActivity = document.getElementById('frmActivity');
-  let frmBtnSave = document.getElementById('frmBtnSave');
   btnAddNew.addEventListener('click', function(){
     frmActivity.classList.toggle('hide');
     frmBtnSave.classList.toggle('hide');
@@ -44,7 +44,6 @@ module.exports = function current(){
       frmBtnSave.classList.toggle('hide');
     })
   });
-  //endregion
   mySkills.clientRoutes.getData('currentCategoryMenu', function(err, data){
     if(err){
       console.error(err);
@@ -54,6 +53,9 @@ module.exports = function current(){
   });
   updateView();
 };
+function getElementById(elId){
+  return document.getElementById(elId);
+}
 function updateView(){
   let typeIdx = window.sessionStorage.getItem('typeIndex') || '0';
   var tblActivity = document.getElementById('tbl-activity');
