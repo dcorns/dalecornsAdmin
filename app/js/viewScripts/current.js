@@ -5,7 +5,6 @@
  * Depends on global mySkills
  */
 'use strict';
-
 module.exports = function current(){
   document.addEventListener('dataSaved', updateView, false); //event triggered by activityEdit.js after saving so update view can be called
   let btnActivityMenu = document.getElementById('btn-activity-menu');
@@ -14,7 +13,6 @@ module.exports = function current(){
     activityMenu.classList.toggle('hide');
   });
   if (!(parseInt(window.sessionStorage.getItem('typeIndex'), 10))) window.sessionStorage.setItem('typeIndex', '0');
-  let typeIdx = window.sessionStorage.getItem('typeIndex') || '0';
   //region Admin Only
   let btnAddNew = document.getElementById('btnAddNew');
   let frmActivity = document.getElementById('frmActivity');
