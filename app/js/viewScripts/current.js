@@ -22,8 +22,6 @@ module.exports = function current(){
   [menus, btns, frms] = configureElements(); //es6 destructors
   addBtnClickListeners(btns);
   updateView();
-  updateView();
-  updateView();
 };
 //DOM form, button, and menu elements retrieval and configuration-------------------------------
 function configureElements(){
