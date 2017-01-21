@@ -22,6 +22,8 @@ module.exports = function current(){
   [menus, btns, frms] = configureElements(); //es6 destructors
   addBtnClickListeners(btns);
   updateView();
+  updateView();
+  updateView();
 };
 //DOM form, button, and menu elements retrieval and configuration-------------------------------
 function configureElements(){
@@ -170,7 +172,7 @@ function addTimeLogBtn(dataIdx, elIn){
  * @returns {*}
  */
 function buildActivityLink(data, td){
-  var anchor = document.createElement('a');
+  let anchor = document.createElement('a');
   anchor.href = data;
   let anchorIcon = buildIcon('#icon-link');
   anchor.appendChild(anchorIcon);
@@ -209,7 +211,7 @@ function buildActivityTable(data, tblNow, tblOld){
   splitData.complete.sort(function(a, b){
     return new Date(b.endDate) - new Date(a.endDate);
   });
-  var len = splitData.incomplete.length, c = 0;
+  let len = splitData.incomplete.length, c = 0;
   for(c; c < len; c++){
     appendActivity(splitData.incomplete[c], tblNow, false);
   }
@@ -258,7 +260,7 @@ function addActivityEditing(dataId, elIn){
  * @param menuElement
  */
 function buildMenu(data, menuElement){
-  var menuIndex = 0;
+  let menuIndex = 0;
   data.forEach(function(item){
     let btn = document.createElement('button');
     btn.textContent = item;
@@ -343,8 +345,6 @@ function hideAllTableInserts(ary){
   let i = 0, ln = ary.length;
   for(i; i < ln; i++){
     let tblInsert = document.getElementById(ary[i]);
-    if(!(tblInsert.classList.contains('hide'))) {
-      tblInsert.classList.toggle('hide');
-    }
+    tblInsert.classList.add('hide');
   }
 }
