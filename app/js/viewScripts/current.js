@@ -19,41 +19,11 @@ module.exports = function current(){
 
   document.addEventListener('dataSaved', updateView, false); //event triggered by activityEdit.js after saving so update view can be called
   let btns, menus, frms;
-  [menus, btns, frms] = configureElements();
+  [menus, btns, frms] = configureElements(); //es6 destructors
   addBtnClickListeners(btns);
-  // btns.activityMenu.el.addEventListener('click', function(){
-  //   menus.activityMenu.el.classList.toggle('hide');
-  // });
-  // btns.addNew.el.addEventListener('click', function(){
-  //   frms.activity.el.classList.toggle('hide');
-  //   btns.formSave.el.classList.toggle('hide');
-  // });
-  // btns.formSave.el.addEventListener('click', function(){
-  //   let data = {
-  //     id: 0,
-  //     updates: {
-  //       startDate: document.getElementById('frmStartDate').value,
-  //       activity: document.getElementById('frmActivityLine').value,
-  //       link: document.getElementById('frmLink').value,
-  //       details: document.getElementById('frmDetail').value,
-  //       type: window.sessionStorage.getItem('typeIndex') || '0',
-  //       endDate: document.getElementById('frmEndDate').value
-  //     }
-  //   };
-  //   mySkills.clientRoutes.saveData('saveActivity', data, function (err, data) {
-  //     if(err){
-  //       alert('Error saving data!');
-  //       return;
-  //     }
-  //     window.localStorage.setItem('updateId', 'newSaved');
-  //     updateView();
-  //     frms.activity.el.classList.toggle('hide');
-  //     btns.formSave.el.classList.toggle('hide');
-  //   })
-  // });
   updateView();
 };
-//loads DOM form, button, and menu elements into the objects menus, btns, frms
+//DOM form, button, and menu elements retrieval and configuration-------------------------------
 function configureElements(){
   let menus = {
     activityMenu: {
@@ -108,11 +78,10 @@ function configureElements(){
   };
   return [menus, btns, frms];
 }
-//add event listener to element
 function getElementById(elId){
   return document.getElementById(elId);
 }
-//use click property of object to create listener for el property
+//use 'click' property of object to create listener for 'el' property
 function addBtnClickListeners(obj){
   let ary = Object.keys(obj), l = ary.length, i = 0;
   for(i; i < l; i++){
@@ -121,8 +90,12 @@ function addBtnClickListeners(obj){
 }
 function updateView(){
   let typeIdx = window.sessionStorage.getItem('typeIndex') || '0';
-  var tblActivity = document.getElementById('tbl-activity');
-  var tblComplete = document.getElementById('tbl-complete');
+  //region Clear Activity Tables
+  let tblActivity = getElementById('tbl-activity');
+  let tblComplete = getElementById('tbl-complete');
+  tblActivity.innerHTML = '';
+  tblComplete.innerHTML = '';
+  //endregion
   hideAllTableInserts(['activity-edit', 'activity-detail', 'time-log-table']);
   mySkills.clientRoutes.getData('current?typeIndex=' + typeIdx, function(err, data){
     if(err){
@@ -131,8 +104,6 @@ function updateView(){
       return;
     }
     window.localStorage.setItem('current', JSON.stringify(data));
-    tblActivity.innerHTML = '';
-    tblComplete.innerHTML = '';
     buildActivityTable(data.json, tblActivity, tblComplete);
   });
 }
@@ -145,12 +116,14 @@ function updateView(){
  * @param hasEndDate
  */
 function appendActivity(aObj, tbl, hasEndDate){
-  var row = document.createElement('tr');
-  var startDate = document.createElement('td');
-  var activityLink = document.createElement('td');
-  var activity = document.createElement('td');
+  let row = document.createElement('tr');
+  let startDate = document.createElement('td');
+  let activityLink = document.createElement('td');
+  let activity = document.createElement('td');
+  let endDate = hasEndDate ? document.createElement('td') : null;
+  let btnColumn = document.createElement('td');
+  row.id = aObj.idx;
   activity.innerText = aObj.activity;
-  var endDate = hasEndDate ? document.createElement('td') : null;
   startDate.innerText = new Date(aObj.startDate).toLocaleDateString();
   if(aObj.link){
     activityLink = buildActivityLink(aObj.link, activityLink);
@@ -165,19 +138,13 @@ function appendActivity(aObj, tbl, hasEndDate){
   if(aObj['details']){
     addDetails(row, aObj.details, 'activity-detail');
   }
-  //region Admin Only
-  let btnColumn = document.createElement('td');
   addActivityEditing(aObj.idx, btnColumn);
   addTimeLogBtn(aObj.idx, btnColumn);
   row.appendChild(btnColumn);
-  row.id = aObj.idx;
   row.setAttribute('data-startdate', aObj.startDate);
   row.setAttribute('data-activity', aObj.activity);
   row.setAttribute('data-link', aObj.link);
   row.setAttribute('data-enddate', aObj.endDate);
-
-  //endregion
-
   tbl.appendChild(row);
 }
 /**
