@@ -19,7 +19,7 @@ module.exports = function current(){
 
   document.addEventListener('dataSaved', updateView, false); //event triggered by activityEdit.js after saving so update view can be called
   let btns, menus, frms;
-  [menus, btns, frms] = configureElements(); //es6 destructors
+  [menus, btns, frms] = configureElements(); //es6 destructor
   addBtnClickListeners(btns);
   updateView();
 };
