@@ -11,11 +11,11 @@ module.exports = function activityEdit(){
   window.localStorage.setItem('updateId', data._id);
   let frm = self.childNodes[1];
   let btnSave = self.childNodes[3];
+  let btnCancel =  self.childNodes[4];
   frm[0].value = data.startDate;
   frm[1].value = data.endDate;
   frm[2].value = data.activity;
   frm[3].value = data.link;
-  frm[4].value = data.details;
   btnSave.addEventListener('click', function(){
     let data = {
       id: window.localStorage.getItem('updateId'),

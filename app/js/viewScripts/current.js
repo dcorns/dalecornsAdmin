@@ -309,17 +309,20 @@ function tableInsertView(viewIn, insertRow){
  * @function btnEditEventHandler
  * Event handler for edit button. Loads the activityEdit component and updates the view if edit saved
  * Depends on locaStorage 'updateId', mySkills global, section 'activity-edit', and tableInsertView, updateView functions
+ * Also depends on it's associated script
  * @param e
  */
-function btnEditEventHandler(e) {
+function btnEditEventHandler(e)
+{
   if(window.localStorage.getItem('updateId') === 'updated'){
     updateView();
   }
   //dataid is the array index of the data object in local storage current
   let rowAndDataId = e.target.dataset.dataid;
-  let view = document.getElementById('activity-edit');
+  let view = getElementById('activity-edit');
   view.setAttribute('data-dataid', rowAndDataId);
-  let row = document.getElementById(rowAndDataId);
+  let row = getElementById(rowAndDataId);
+  //The edit view is html that is inserted into the current view and has its on script associated with it
   mySkills.route('activityEdit', 'activity-edit');
   tableInsertView(view, row);
 }
