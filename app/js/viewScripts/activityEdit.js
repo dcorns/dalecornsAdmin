@@ -6,8 +6,9 @@
 'use strict';
 module.exports = function activityEdit(){
   let self = document.getElementById('activityEdit');
-  let dataIndex = self.parentElement.dataset.dataid;
-  let data = JSON.parse(window.localStorage.getItem('current')).json[dataIndex];
+  let dataIndex = self.parentElement.dataset.dataidx;
+  let dataArray = self.parentElement.dataset.ary;
+  let data = JSON.parse(window.localStorage.getItem(dataArray)).json[dataIndex];
   window.localStorage.setItem('updateId', data._id);
   let frm = self.childNodes[1];
   let btnSave = self.childNodes[3];

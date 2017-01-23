@@ -138,7 +138,7 @@ function appendActivity(aObj, tbl, hasEndDate){
   if(aObj['details']){
     addDetails(row, aObj.details, 'activity-detail');
   }
-  addActivityEditing(aObj.idx, btnColumn);
+  addDataBoundButton('EDIT', btnEditEventHandler, aObj.idx, 'current', btnColumn);
   addTimeLogBtn(aObj.idx, btnColumn);
   row.appendChild(btnColumn);
   row.setAttribute('data-startdate', aObj.startDate);
@@ -239,17 +239,23 @@ function addDetails(rowIn, details, viewContainer){
   rowIn.childNodes[0].insertBefore(btn, rowIn.childNodes[0].childNodes[0]);
 }
 /**
- * @function addActivityEditing
- * Defines and places the edit button
- * @param dataId
+ * @function addDataBoundButton
+ * Creates a button element with reference to a data array and index for the buttons related data within the array.
+ * Adds a click event function
+ * Then attaches it to the provided DOM object
+ * @param btnText
+ * @param click
+ * @param dataIdx
+ * @param dataArray
  * @param elIn
  */
-function addActivityEditing(dataId, elIn){
-  let btnEdit = document.createElement('button');
-  btnEdit.textContent = 'EDIT';
-  btnEdit.setAttribute('data-dataid', dataId);
-  btnEdit.addEventListener('click', btnEditEventHandler);
-  elIn.appendChild(btnEdit);
+function addDataBoundButton(btnText, click, dataIdx, dataArray, elIn){
+  let btn = document.createElement('button');
+  btn.textContent = btnText;
+  btn.setAttribute('data-dataidx', dataIdx);
+  btn.setAttribute('data-ary', dataArray);
+  btn.addEventListener('click', click);
+  elIn.appendChild(btn);
 }
 /**
  * @function buildMenu
@@ -315,10 +321,12 @@ function btnEditEventHandler(e) {
   if(window.localStorage.getItem('updateId') === 'updated'){
     updateView();
   }
-  //dataid is the array index of the data object in local storage current
-  let rowAndDataId = e.target.dataset.dataid;
+  //dataidx is the array index of the data object in local storage current
+  let rowAndDataId = e.target.dataset.dataidx;
+  let dataArray = e.target.dataset.ary;
   let view = document.getElementById('activity-edit');
-  view.setAttribute('data-dataid', rowAndDataId);
+  view.setAttribute('data-dataidx', rowAndDataId);
+  view.setAttribute('data-ary', dataArray);
   let row = document.getElementById(rowAndDataId);
   mySkills.route('activityEdit', 'activity-edit');
   tableInsertView(view, row);
