@@ -139,6 +139,7 @@ function appendActivity(aObj, tbl, hasEndDate){
     addDetails(row, aObj.details, 'activity-detail');
   }
   addDataBoundButton('EDIT', btnEditEventHandler, aObj.idx, 'current', btnColumn);
+  addDataBoundButton('DELETE', deleteActivity, aObj.idx, 'current', btnColumn);
   addTimeLogBtn(aObj.idx, btnColumn);
   row.appendChild(btnColumn);
   row.setAttribute('data-startdate', aObj.startDate);
@@ -345,6 +346,7 @@ function btnTimeLogEventHandler(e){
 }
 /**
  * @function hideAllTableInserts
+ *
  * @param ary
  */
 function hideAllTableInserts(ary){
@@ -353,4 +355,17 @@ function hideAllTableInserts(ary){
     let tblInsert = document.getElementById(ary[i]);
     tblInsert.classList.add('hide');
   }
+}
+function deleteActivity(e){
+  let eData = e.target.dataset, dataArray = eData.ary, dataIdx = eData.dataidx;
+  let dataRecord = JSON.parse(window.localStorage.getItem(dataArray)).json[dataIdx];
+  console.dir(dataRecord);
+  mySkills.clientRoutes.deleteData('deleteActivity', dataRecord, function(err, data){
+    if(err){
+      alert('Could not delete Record');
+      console.dir(err);
+      return;
+    }
+    updateView();
+  });
 }

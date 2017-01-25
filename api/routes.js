@@ -62,6 +62,18 @@ module.exports = function(app){
       }
     });
   });
+  app.post('/deleteActivity', function(req, res){
+    dataScript.deleteActivity(req.body, function(err, data){
+      if(err){
+        playErr(res, new Error('There was a problem deleting the activity'));
+        res.status(302);
+      }
+      else{
+        res.status(201);
+        res.send(data);
+      }
+    });
+  });
   app.get('/skills', function (req, res, next){
     corngoose.getCollection('competencies', function(err, data){
       res.status(200);

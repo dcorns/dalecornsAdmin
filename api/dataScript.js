@@ -6,6 +6,7 @@
 'use strict';
 const cg = require('corngoose');
 const auth = require('cornorize');
+const ObjectId = require('mongodb').ObjectId;
 module.exports = {
   saveProfile: function saveProfile(token, data, cb) {
     var aboutMe = {mainHeader: data.aboutMeHeader, subText: data.aboutMe};
@@ -63,6 +64,12 @@ module.exports = {
         }
       });
     });
+  },
+  deleteActivity: function deleteActivity(data, cb){
+    cg.dbDocRemove({_id: ObjectId(data._id)}, 'currentActivities', function(err, data){
+      if(err) cb(err, null);
+      else cb(null, data);
+    })
   }
 
 };

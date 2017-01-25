@@ -29,6 +29,7 @@ let server;
 let path = require('path');
 //Serve static assets from public
 const webRoot = process.argv[2] || '/public';
+const newWebRoot = path.join(__dirname, webRoot);//added because when running through gulp index is sent, but when running through webstorm debugger it complains about the path.
 app.use(express.static(path.join(__dirname, webRoot)));
 app.use(bodyparser.json());
 app.get('/', function (req, res) {
@@ -37,7 +38,7 @@ app.get('/', function (req, res) {
     "style-src 'self'");
   res.status(200);
   res.header('Content-Type', 'text/html');
-  res.sendFile('index.html');
+  res.sendFile(path.join(newWebRoot,'index.html');
   res.end();
 });
 

@@ -31,6 +31,17 @@ module.exports = function clientRoutes(){
           cb(null, data);
         }
       });
+    },
+    deleteData: function(path, data, cb){
+      doAjax.ajaxPostJson('/' + path, data, function(err, data){
+        if(err){
+          console.error(err);
+          cb(err, null);
+        }
+        else{
+          cb(null, data);
+        }
+      })
     }
   };
 };
