@@ -66,7 +66,8 @@ module.exports = {
     });
   },
   deleteActivity: function deleteActivity(data, cb){
-    cg.dbDocRemove({_id: ObjectId(data._id)}, 'currentActivities', function(err, data){
+    cg.dbDocRemove({_id: data._id}, 'currentActivities', function(err, data){
+      //add error handling based on response object
       if(err) cb(err, null);
       else cb(null, data);
     })
