@@ -15,7 +15,7 @@ import * as bodyparser from "body-parser";
 let corngoose = require ("corngoose");
 let app = express();
 let server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
-let server_port = process.env.HTTP_PORT || 3000;
+let server_port = process.env.HTTP_PORT || 4000;
 let remoteDataBase = process.env.REMOTE_DATABASE || '127.0.0.1';
 let remoteDataBasePort = process.env.REMOTE_DATABASE_PORT || 270175;
 let remoteDataBaseTimeout = process.env.REMOTE_DATABASE_TIMEOUT || 1;
@@ -38,7 +38,7 @@ app.get('/', function (req, res) {
     "style-src 'self'");
   res.status(200);
   res.header('Content-Type', 'text/html');
-  res.sendFile(path.join(newWebRoot,'index.html');
+  res.sendFile(path.join(newWebRoot,'index.html'));
   res.end();
 });
 
